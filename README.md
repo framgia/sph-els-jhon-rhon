@@ -7,4 +7,4 @@
 
 ### Project set-up
 1. `php artisan serve` on backend laravel api
-2. `npm start` on frontend react app# sph-els-jhon-rhon
+2. `npm start` on frontend react app
