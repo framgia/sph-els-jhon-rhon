@@ -1,65 +1,59 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
+import { useSelector, useDispatch } from 'react-redux'
+
 import AuthInput from '../components/molecules/AuthInput';
 import SubmitButton from '../components/atoms/SubmitButton';
 import FormTemplate from '../components/templates/FormTemplate';
 import HeaderError from '../components/atoms/HeaderError';
-import AuthContext from '../context/AuthProvider';
+import { setRegisterData, setRegisterErrors } from '../redux/userRegister';
 
 const Register = () => {
-    const { auth, setAuth } = useContext(AuthContext);
-    const [data, setData] = useState({
-        'fname': '',
-        'lname': '',
-        'email': '',
-        'password': ''
-    });
-    const [errors, setErrors] = useState({
-        'serverError': '',
-        'fname': '',
-        'lname': '',
-        'email': '',
-        'password': ''
-    });
+    const { registerData, registerErrors } = useSelector(state => state.userRegister);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post('/register', data);
+            const response = await axios.post('/register', registerData);
 
-            //console.log(response.data);
+            //console.log(response);
 
-            if(response.data.status === 400) {
-                setData({...data, password: ''});
-                setErrors(response.data.errors);
-            } else if ( response.data.status === 200 ) {
-                setAuth({...auth,
-                    isSignedIn: true,
-                    fname: response.data.fname,
-                    lname: response.data.lname, 
-                    email: response.data.email
-                });
-                navigate('/', { replace : true });
-            }
+            navigate('/', { replace : true });
             
-        } catch (err) {
-            setErrors({...errors, serverError: 'Registration Failed'});
-        }
+        } catch (error) {
+            dispatch(setRegisterData({key: 'password', value: ''}));
+            _.map(registerErrors, function(value, key){
+                dispatch(setRegisterErrors({key, value: ''}));
+            });
 
+            if(error.response.status === 400) {
+                _.map(error.response.data.errors, function(value, key){
+                    dispatch(setRegisterErrors({key, value}));
+                });
+                return;
+            }
+            if(error.response.status === 500) {
+                dispatch(setRegisterErrors({key: 'header', value: 'No response from the server'}));
+                return;
+            }
+
+            dispatch(setRegisterErrors({key: 'header', value: 'Registration Failed'}));
+        }
     }
 
     return (
         <section>
             <FormTemplate onSubmit={onSubmit} formHeader='Register'>
-                <HeaderError>{errors.serverError}</HeaderError>
-                <AuthInput inputLabel='First Name' value={data.fname} onChange={(e) => setData({...data, fname: e.target.value})} inputType='text' inputName='fname' errorMessage={errors.fname}/>
-                <AuthInput inputLabel='Last Name' value={data.lname} onChange={(e) => setData({...data, lname: e.target.value})} inputType='text' inputName='lname' errorMessage={errors.lname}/>
-                <AuthInput inputLabel='Email' value={data.email} onChange={(e) => setData({...data, email: e.target.value})} inputType='email' inputName='email' errorMessage={errors.email}/>
-                <AuthInput inputLabel='Password' value={data.password} onChange={(e) => setData({...data, password: e.target.value})} inputType='password' inputName='password' errorMessage={errors.password}/>
+                <HeaderError>{registerErrors.header}</HeaderError>
+                <AuthInput inputLabel='First Name' value={registerData.fname} inputType='text' onChange={(e) => dispatch(setRegisterData({key: 'fname', value: e.target.value}))} inputName='fname' errorMessage={registerErrors.fname}/>
+                <AuthInput inputLabel='Last Name' value={registerData.lname} inputType='text' onChange={(e) => dispatch(setRegisterData({key: 'lname', value: e.target.value}))} inputName='lname' errorMessage={registerErrors.lname}/>
+                <AuthInput inputLabel='Email' value={registerData.email} inputType='email' onChange={(e) => dispatch(setRegisterData({key: 'email', value: e.target.value}))} inputName='email' errorMessage={registerErrors.email}/>
+                <AuthInput inputLabel='Password' value={registerData.password} inputType='password' onChange={(e) => dispatch(setRegisterData({key: 'password', value: e.target.value}))} inputName='password' errorMessage={registerErrors.password}/>
                 <div className='flex justify-end pt-5'>
                     <SubmitButton buttonText='Submit' />
                 </div>

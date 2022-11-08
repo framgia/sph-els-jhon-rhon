@@ -20,29 +20,24 @@ class RegisterController extends Controller
             'password' => ['required'],
         ]);
 
-        if( $validator->fails() )
-        {
+        if( $validator->fails() ) {
             return response()->json([
-                'status' => 400,
                 'errors' => $validator->messages(),
-            ]);
+            ], 400);
         }
-        else
-        {
-            $user = User::create([
-                'fname' => $request->fname,
-                'lname' => $request->lname,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'type' => 'student',
-            ]);
 
-            return response()->json([
-                'status' => 200,
-                'fame' => $user->fname,
-                'lname' => $user->lname,
-                'email' => $user->email,
-            ]);
-        }
+        $user = User::create([
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => 'student',
+        ]);
+
+        return response()->json([
+            'fame' => $user->fname,
+            'lname' => $user->lname,
+            'email' => $user->email,
+        ]);
     }
 }
