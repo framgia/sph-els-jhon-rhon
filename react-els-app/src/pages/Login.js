@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from '../api/axios';
 import { useSelector, useDispatch } from 'react-redux'
-import _ from "lodash";
+import { map } from "lodash";
 
 import FormTemplate from "../components/templates/FormTemplate";
 import AuthInput from "../components/molecules/AuthInput";
@@ -21,20 +21,16 @@ const Login = () => {
         try {
             const response = await axios.post('/login', loginData);
 
-            console.log(response);
-
             navigate('/', { replace: true });
         } 
         catch (error) {
             dispatch(setLoginData({key: 'password', value: ''}));
-            _.map(loginErrors, function(value, key){
+            map(loginErrors, function(value, key){
                 dispatch(setLoginErrors({key, value: ''}));
             });
 
-            //console.log(error.response.data.errors);
-
             if( (error.response.status === 400) || (error.response.status === 400) ) {
-                _.map(error.response.data.errors, function(value, key){
+                map(error.response.data.errors, function(value, key){
                     dispatch(setLoginErrors({key, value}));
                 });
                 return;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
@@ -14,22 +15,20 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if( $validator->fails() ) {
+        if($validator->fails()) {
             return response()->json([
                 'errors' => $validator->messages(),
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST;
         }
 
-        if( !auth()->attempt($request->only('email', 'password')) ) {
+        if(!auth()->attempt($request->only('email', 'password'))) {
             return response()->json([
                 'errors' => ['header' => 'Invalid login details'],
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         return response()->json([
-            'fname' => auth()->user()->fname,
-            'lname' => auth()->user()->lname,
-            'email' => auth()->user()->email,
+            'user' => auth()->user(),
         ]);
     }
 }
