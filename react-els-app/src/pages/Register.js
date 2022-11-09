@@ -25,7 +25,8 @@ const Register = () => {
 
             navigate('/', { replace : true });
             
-        } catch (error) {
+        } 
+        catch (error) {
             dispatch(setRegisterData({key: 'password', value: ''}));
             _.map(registerErrors, function(value, key){
                 dispatch(setRegisterErrors({key, value: ''}));
@@ -43,7 +44,7 @@ const Register = () => {
             }
 
             dispatch(setRegisterErrors({key: 'header', value: 'Registration Failed'}));
-        }
+        } 
     }
 
     return (
