@@ -13,7 +13,7 @@ const Navbar = () => {
                 <div className="flex flex-row space-x-10">
                     <Link to="/categories">Categories</Link>
                     <Link to="/login">Login</Link>
-                    <Link to="/logout">Login</Link>
+                    <Link to="/logout">Logout</Link>
                     <Link to="/register">Register</Link>
                 </div>
             </div>
