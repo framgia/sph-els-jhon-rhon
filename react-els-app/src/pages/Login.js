@@ -31,16 +31,9 @@ const Login = () => {
                 dispatch(setLoginErrors({key, value: ''}));
             });
 
-            console.log(error.response.data.errors);
+            //console.log(error.response.data.errors);
 
-            if( error.response.status === 400 ) {
-                _.map(error.response.data.errors, function(value, key){
-                    dispatch(setLoginErrors({key, value}));
-                });
-                return;
-            }
-
-            if( error.response.status === 401 ) {
+            if( (error.response.status === 400) || (error.response.status === 400) ) {
                 _.map(error.response.data.errors, function(value, key){
                     dispatch(setLoginErrors({key, value}));
                 });
