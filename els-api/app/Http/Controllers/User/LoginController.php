@@ -18,7 +18,7 @@ class LoginController extends Controller
         if($validator->fails()) {
             return response()->json([
                 'errors' => $validator->messages(),
-            ], Response::HTTP_BAD_REQUEST;
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if(!auth()->attempt($request->only('email', 'password'))) {
