@@ -29,7 +29,7 @@ const Login = () => {
                 dispatch(setLoginErrors({key, value: ''}));
             });
 
-            if( (error.response.status === 400) || (error.response.status === 400) ) {
+            if( (error.response.status === 400) || (error.response.status === 401) ) {
                 map(error.response.data.errors, function(value, key){
                     dispatch(setLoginErrors({key, value}));
                 });
