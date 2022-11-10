@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { map } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
@@ -9,6 +9,7 @@ import SubmitButton from '../components/atoms/SubmitButton';
 import FormTemplate from '../components/templates/FormTemplate';
 import HeaderError from '../components/atoms/HeaderError';
 import { setRegisterData, setRegisterErrors } from '../redux/userRegister';
+import { loginUser } from "../redux/userAuthentication";
 
 const Register = () => {
     const { registerData, registerErrors } = useSelector(state => state.userRegister);
@@ -20,6 +21,8 @@ const Register = () => {
 
         try {
             const response = await axios.post('/register', registerData);
+
+            dispatch(loginUser(response.data.user));
 
             navigate('/', { replace : true });            
         } 

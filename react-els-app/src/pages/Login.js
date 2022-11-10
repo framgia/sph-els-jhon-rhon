@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from '../api/axios';
 import { useSelector, useDispatch } from 'react-redux'
 import { map } from "lodash";
@@ -9,11 +9,14 @@ import AuthInput from "../components/molecules/AuthInput";
 import SubmitButton from "../components/atoms/SubmitButton";
 import HeaderError from "../components/atoms/HeaderError";
 import { setLoginData, setLoginErrors } from "../redux/userLogin";
+import { loginUser } from "../redux/userAuthentication";
 
 const Login = () => {
     const { loginData, loginErrors } = useSelector(state => state.userLogin);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -21,7 +24,9 @@ const Login = () => {
         try {
             const response = await axios.post('/login', loginData);
 
-            navigate('/', { replace: true });
+            dispatch(loginUser(response.data.user));
+
+            navigate(from, { replace: true });
         } 
         catch (error) {
             dispatch(setLoginData({key: 'password', value: ''}));
