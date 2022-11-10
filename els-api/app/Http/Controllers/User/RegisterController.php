@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
@@ -20,10 +21,10 @@ class RegisterController extends Controller
             'password' => ['required'],
         ]);
 
-        if( $validator->fails() ) {
+        if($validator->fails()) {
             return response()->json([
                 'errors' => $validator->messages(),
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $user = User::create([
@@ -34,10 +35,10 @@ class RegisterController extends Controller
             'type' => 'student',
         ]);
 
+        auth()->attempt($request->only('email', 'password'));
+
         return response()->json([
-            'fame' => $user->fname,
-            'lname' => $user->lname,
-            'email' => $user->email,
+            'user' => auth()->user(),
         ]);
     }
 }

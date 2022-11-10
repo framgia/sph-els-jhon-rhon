@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import _ from 'lodash';
+import { map } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import { useSelector, useDispatch } from 'react-redux'
@@ -21,18 +21,16 @@ const Register = () => {
         try {
             const response = await axios.post('/register', registerData);
 
-            //console.log(response);
-
-            navigate('/', { replace : true });
-            
-        } catch (error) {
+            navigate('/', { replace : true });            
+        } 
+        catch (error) {
             dispatch(setRegisterData({key: 'password', value: ''}));
-            _.map(registerErrors, function(value, key){
+            map(registerErrors, function(value, key){
                 dispatch(setRegisterErrors({key, value: ''}));
             });
 
             if(error.response.status === 400) {
-                _.map(error.response.data.errors, function(value, key){
+                map(error.response.data.errors, function(value, key){
                     dispatch(setRegisterErrors({key, value}));
                 });
                 return;
@@ -43,7 +41,7 @@ const Register = () => {
             }
 
             dispatch(setRegisterErrors({key: 'header', value: 'Registration Failed'}));
-        }
+        } 
     }
 
     return (

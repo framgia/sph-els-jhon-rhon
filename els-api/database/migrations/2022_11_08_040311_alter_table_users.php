@@ -17,7 +17,7 @@ return new class extends Migration
             $table->dropColumn(['name']);
             $table->string('fname');
             $table->string('lname');
-            $table->string('type');
+            $table->string('type')->default('student');
         });
     }
 
