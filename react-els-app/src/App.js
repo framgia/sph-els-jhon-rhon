@@ -5,6 +5,7 @@ import Navbar from './components/organisms/Navbar';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import RequireAuth from './components/templates/RequireAuth';
+import { roles } from './redux/roles';
 
 const App = () => {
 
@@ -17,11 +18,11 @@ const App = () => {
                 <Route element={<RequireAuth allowedRoles='authenticated' />} >
                     <Route path="/categories" element="Categories" />
                 </Route>
-                <Route element={<RequireAuth allowedRoles='guest' />} >
+                <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
                     <Route path="/login" element={<Login />} />
                 </Route>
                 <Route path="/logout" element="Logout" />
-                <Route element={<RequireAuth allowedRoles='guest' />} >
+                <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
                     <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
