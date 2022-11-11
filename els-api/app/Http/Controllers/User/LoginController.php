@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,8 +28,11 @@ class LoginController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
+        $user = auth()->user();
+
         return response()->json([
-            'user' => auth()->user(),
+            'user' => $user,
+            'token' => $user->createToken('API Token of ' . $user->email)->plainTextToken,
         ]);
     }
 }

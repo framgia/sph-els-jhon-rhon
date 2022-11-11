@@ -4,16 +4,23 @@ export const userAuthenticationSlice = createSlice({
     name: 'userAuthentication',
     initialState: {
         user: {},
-        isLoggedIn: false
+        isLoggedIn: false,
+        token: ''
     },
     reducers: {
         loginUser: (state, action) => {
             state.isLoggedIn = true;
-            state.user = action.payload;
+            state.user = action.payload.user;
+            state.token = action.payload.token;
+        },
+        logoutUser: (state) => {
+            state.isLoggedIn = false;
+            state.user = {};
+            state.token = '';
         }
     }
 });
 
-export const { loginUser } = userAuthenticationSlice.actions;
+export const { loginUser, logoutUser } = userAuthenticationSlice.actions;
 
 export default userAuthenticationSlice.reducer;

@@ -12,8 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RegisterController extends Controller
 {
 
-    public function create(Request $request)
-    {
+    public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'fname' => ['required', 'max:255'],
             'lname' => ['required', 'max:255'],
@@ -37,8 +36,11 @@ class RegisterController extends Controller
 
         auth()->attempt($request->only('email', 'password'));
 
+        $user = auth()->user();
+
         return response()->json([
-            'user' => auth()->user(),
+            'user' => $user,
+            'token' => $user->createToken('API Token of ' . $user->email)->plainTextToken,
         ]);
     }
 }
