@@ -22,7 +22,7 @@ const Register = () => {
         try {
             const response = await axios.post('/register', registerData);
 
-            dispatch(loginUser(response.data.user));
+            dispatch(loginUser(response.data));
             
             map(registerData, function(value, key){
                 dispatch(setRegisterData({key, value: ''}));
