@@ -1,21 +1,30 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/organisms/Navbar';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import RequireAuth from './components/templates/RequireAuth';
+import { roles } from './redux/roles';
 
 const App = () => {
+
     return (
         <React.Fragment>
             <Navbar />
 
             <Routes>
-                <Route path="/" element="Home" />
-                <Route path="/categories" element="Categories" />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element="home" />
+                <Route element={<RequireAuth allowedRoles='authenticated' />} >
+                    <Route path="/categories" element="Categories" />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
+                    <Route path="/login" element={<Login />} />
+                </Route>
                 <Route path="/logout" element="Logout" />
-                <Route path="/register" element={<Register />} />
+                <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
+                    <Route path="/register" element={<Register />} />
+                </Route>
             </Routes>
         </React.Fragment>
     );
