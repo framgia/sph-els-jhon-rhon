@@ -22,11 +22,15 @@ const Register = () => {
         try {
             const response = await axios.post('/register', registerData);
 
-            dispatch(loginUser(response.data.user));
+            dispatch(loginUser(response.data));
+            
+            map(registerData, function(value, key){
+                dispatch(setRegisterData({key, value: ''}));
+            });
 
             navigate('/', { replace : true });            
         } 
-        catch (error) {
+        catch(error) {
             dispatch(setRegisterData({key: 'password', value: ''}));
             map(registerErrors, function(value, key){
                 dispatch(setRegisterErrors({key, value: ''}));

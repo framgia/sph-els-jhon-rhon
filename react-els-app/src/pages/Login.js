@@ -24,11 +24,15 @@ const Login = () => {
         try {
             const response = await axios.post('/login', loginData);
 
-            dispatch(loginUser(response.data.user));
+            dispatch(loginUser(response.data));
+            
+            map(loginData, function(value, key){
+                dispatch(setLoginData({key, value: ''}));
+            });
 
             navigate(from, { replace: true });
         } 
-        catch (error) {
+        catch(error) {
             dispatch(setLoginData({key: 'password', value: ''}));
             map(loginErrors, function(value, key){
                 dispatch(setLoginErrors({key, value: ''}));

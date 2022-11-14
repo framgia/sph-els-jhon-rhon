@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux';
 
+import { roles } from '../../redux/roles';
+
 const ProtectedTags = ({ children, allowedRoles }) => {
     const { isLoggedIn } = useSelector(state => state.persist.userAuthentication);
 
-    if(!isLoggedIn && (allowedRoles === 'guest')) {
+    if(!isLoggedIn && (allowedRoles?.includes(roles.GUEST))) {
         return children;
     }
-    if(isLoggedIn && (allowedRoles === 'authenticated')) {
+    if(isLoggedIn && (allowedRoles?.includes(roles.AUTHENTICATED))) {
         return children;
     }
 
