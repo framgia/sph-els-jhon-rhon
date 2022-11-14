@@ -7,21 +7,32 @@ import { roles } from '../../redux/roles';
 
 const Navbar = () => {
     return (
-        <nav className="container w-auto mx-auto bg-blue-300 py-6 px-60">
-            <div className="flex flex-row justify-between">
-                <Link to="/">
-                    <div className="flex text-2xl">
-                        E-Learning System
-                    </div>
-                </Link>
-                <div className="flex flex-row space-x-10">
+        <nav className='container w-auto mx-auto bg-blue-300 py-6 px-60'>
+            <div className='flex flex-row justify-between'>
+                <div className='flex flex-row space-x-5'>
+                    <Link to='/'>
+                        <div className='flex text-2xl items-end'>
+                            E-Learning System
+                        </div>
+                    </Link>
+                    <ProtectedTags allowedRoles={[roles.ADMIN]}>
+                        <div className='flex items-center'>|</div>
+                        <div className='flex items-center'>Admin</div>
+                    </ProtectedTags>
+                </div>
+                <div className='flex flex-row space-x-10 items-center'>
+                    <ProtectedTags allowedRoles={[roles.ADMIN]}>
+                    <Link to='/admin/categories'>Categories</Link>
+                    </ProtectedTags>
                     <ProtectedTags allowedRoles={[roles.AUTHENTICATED]}>
-                        <Link to="/categories">Categories</Link>
+                        <Link to='/categories'>Categories</Link>
+                    </ProtectedTags>
+                    <ProtectedTags allowedRoles={[roles.AUTHENTICATED, roles.ADMIN]}>
                         <LogoutUser>Logout</LogoutUser>
                     </ProtectedTags>
                     <ProtectedTags allowedRoles={[roles.GUEST]}>
-                        <Link to="/login">Login</Link>
-                        <Link to="/register">Register</Link>
+                        <Link to='/login'>Login</Link>
+                        <Link to='/register'>Register</Link>
                     </ProtectedTags>
                 </div>
             </div>

@@ -9,7 +9,7 @@ import SubmitButton from '../components/atoms/SubmitButton';
 import FormTemplate from '../components/templates/FormTemplate';
 import HeaderError from '../components/atoms/HeaderError';
 import { setRegisterData, setRegisterErrors } from '../redux/userRegister';
-import { loginUser } from "../redux/userAuthentication";
+import { loginUser } from '../redux/userAuthentication';
 
 const Register = () => {
     const { registerData, registerErrors } = useSelector(state => state.userRegister);
@@ -26,6 +26,10 @@ const Register = () => {
             
             map(registerData, function(value, key){
                 dispatch(setRegisterData({key, value: ''}));
+            });
+
+            map(registerErrors, function(value, key){
+                dispatch(setRegisterErrors({key, value: ''}));
             });
 
             navigate('/', { replace : true });            

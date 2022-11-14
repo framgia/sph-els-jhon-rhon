@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 const LinkButton = ({ children, onClick }) => {
     return (
-        <div className="cursor-pointer" onClick={onClick}>
+        <div className='cursor-pointer' onClick={onClick}>
             {children}
         </div>
     );

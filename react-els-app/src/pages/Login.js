@@ -1,15 +1,15 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../api/axios';
 import { useSelector, useDispatch } from 'react-redux'
-import { map } from "lodash";
+import { map } from 'lodash';
 
-import FormTemplate from "../components/templates/FormTemplate";
-import AuthInput from "../components/molecules/AuthInput";
-import SubmitButton from "../components/atoms/SubmitButton";
-import HeaderError from "../components/atoms/HeaderError";
-import { setLoginData, setLoginErrors } from "../redux/userLogin";
-import { loginUser } from "../redux/userAuthentication";
+import FormTemplate from '../components/templates/FormTemplate';
+import AuthInput from '../components/molecules/AuthInput';
+import SubmitButton from '../components/atoms/SubmitButton';
+import HeaderError from '../components/atoms/HeaderError';
+import { setLoginData, setLoginErrors } from '../redux/userLogin';
+import { loginUser } from '../redux/userAuthentication';
 
 const Login = () => {
     const { loginData, loginErrors } = useSelector(state => state.userLogin);
@@ -28,6 +28,10 @@ const Login = () => {
             
             map(loginData, function(value, key){
                 dispatch(setLoginData({key, value: ''}));
+            });
+
+            map(loginErrors, function(value, key){
+                dispatch(setLoginErrors({key, value: ''}));
             });
 
             navigate(from, { replace: true });
