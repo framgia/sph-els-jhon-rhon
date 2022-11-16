@@ -8,6 +8,7 @@ import RequireAuth from './components/templates/RequireAuth';
 import { roles } from './redux/roles';
 import AdminCategories from './pages/AdminCategories';
 import AddLesson from './pages/AddLesson';
+import EditLesson from './pages/EditLesson';
 
 const App = () => {
     return (
@@ -24,6 +25,9 @@ const App = () => {
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories/add' element={<AddLesson />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
+                    <Route path='/admin/categories/:id/edit' element={<EditLesson />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
                     <Route path='/login' element={<Login />} />

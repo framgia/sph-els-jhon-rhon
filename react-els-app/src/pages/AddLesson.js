@@ -11,7 +11,7 @@ import LessonTextarea from '../components/molecules/LessonTextarea';
 import { setLessonData, setLessonErrors } from '../redux/addLesson';
 import HeaderError from '../components/atoms/HeaderError';
 
-const AdminAddCategories = () => {
+const AddLesson = () => {
     const { lessonData, lessonErrors } = useSelector(state => state.addLesson);
     const { token } = useSelector(state => state.persist.userAuthentication);
     const dispatch = useDispatch();
@@ -72,4 +72,4 @@ const AdminAddCategories = () => {
     );
 }
 
-export default AdminAddCategories;
+export default AddLesson;

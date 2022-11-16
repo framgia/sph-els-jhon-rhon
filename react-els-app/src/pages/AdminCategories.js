@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -7,7 +7,6 @@ import TableCell from '../components/atoms/TableCell';
 import TableHeader from '../components/atoms/TableHeader';
 import { map } from 'lodash';
 import FetchLessons from '../components/templates/FetchLessons';
-import LinkButton from '../components/atoms/LinkButton';
 
 const AdminCategories = () => {
     const { lessonsData, lessonsError } = useSelector(state => state.lessons);
@@ -38,7 +37,7 @@ const AdminCategories = () => {
                                 <TableCell custStyle={`${cellColor} p-2`}>
                                     <div className='grid grid-rows-3 divide-y lg:grid-rows-none lg:grid-cols-3 lg:divide-x lg:divide-y-0 divide-blue-300'>
                                         <Link className='flex justify-center items-center'>Add word</Link>
-                                        <Link className='flex justify-center items-center'>Edit</Link>
+                                        <Link to={`/admin/categories/${value.id}/edit`} className='flex justify-center items-center'>Edit</Link>
                                         <Link className='flex justify-center items-center'>Delete</Link>
                                     </div>
                                 </TableCell>
