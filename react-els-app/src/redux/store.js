@@ -14,6 +14,7 @@ import storage from 'redux-persist/lib/storage';
 import userRegisterReducer from './userRegister';
 import userLoginReducer from './userLogin';
 import userAuthenticationReducer from './userAuthentication';
+import addLessonReducer from './addLesson';
 
 const persistConfig = {
     key: 'root',
@@ -31,7 +32,8 @@ export const store = configureStore ({
     reducer: {
         userRegister: userRegisterReducer,
         userLogin: userLoginReducer,
-        persist: persistedReducer
+        persist: persistedReducer,
+        addLesson: addLessonReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

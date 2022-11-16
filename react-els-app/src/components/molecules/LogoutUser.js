@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import axios from "../../api/axios";
+import axios from '../../api/axios';
 import { logoutUser } from '../../redux/userAuthentication';
 import LinkButton from '../atoms/LinkButton';
 
