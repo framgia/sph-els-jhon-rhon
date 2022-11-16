@@ -15,7 +15,7 @@ export const addLessonSlice = createSlice({
     },
     reducers: {
         setLessonData: (state, action) => {
-            state.lessonData = { ...state.lessonData, [action.payload.key]: action.payload.value }
+            state.lessonData = { ...state.lessonData, [action.payload.key]: action.payload.value };
         },
         setLessonErrors: (state, action) => {
             state.lessonErrors = { ...state.lessonErrors, [action.payload.key]: action.payload.value };

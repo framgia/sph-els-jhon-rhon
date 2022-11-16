@@ -16,4 +16,5 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/admin/categories/add', [LessonsController::class, 'store']);
+    Route::get('/categories', [LessonsController::class, 'view']);
 });

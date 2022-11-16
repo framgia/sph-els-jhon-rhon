@@ -9,6 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LessonsController extends Controller
 {
+    public function view() {
+        $lessons = Lessons::orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'lessons' => $lessons,
+        ]);
+    }
+
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'max:255'],
