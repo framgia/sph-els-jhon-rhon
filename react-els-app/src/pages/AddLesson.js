@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { map } from 'lodash';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import LessonTextarea from '../components/molecules/LessonTextarea';
 import { setLessonData, setLessonErrors } from '../redux/addLesson';
 import HeaderError from '../components/atoms/HeaderError';
 
-const AdminAddCategories = () => {
+const AddLesson = () => {
     const { lessonData, lessonErrors } = useSelector(state => state.addLesson);
     const { token } = useSelector(state => state.persist.userAuthentication);
     const dispatch = useDispatch();
@@ -44,10 +44,15 @@ const AdminAddCategories = () => {
                 dispatch(setLessonErrors({key, value: ''}));
             });
 
-            if( (error.response.status === 400) || (error.response.status === 401) ) {
+            if(error.response.status === 400) {
                 map(error.response.data.errors, function(value, key){
                     dispatch(setLessonErrors({key, value}));
                 });
+                return;
+            }
+            
+            if(error.response.status === 401) {
+                dispatch(setLessonErrors({key: 'header', value: 'Administrative Privileges Required'}));
                 return;
             }
 
@@ -72,4 +77,4 @@ const AdminAddCategories = () => {
     );
 }
 
-export default AdminAddCategories;
+export default AddLesson;

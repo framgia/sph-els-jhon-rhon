@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const addLessonSlice = createSlice({
-    name: 'addLesson',
+export const editLessonSlice = createSlice({
+    name: 'editLesson',
     initialState: {
         lessonData: {
             title: '',
@@ -14,15 +14,15 @@ export const addLessonSlice = createSlice({
         }
     },
     reducers: {
-        setLessonData: (state, action) => {
+        editLessonData: (state, action) => {
             state.lessonData = { ...state.lessonData, [action.payload.key]: action.payload.value };
         },
-        setLessonErrors: (state, action) => {
+        editLessonErrors: (state, action) => {
             state.lessonErrors = { ...state.lessonErrors, [action.payload.key]: action.payload.value };
-        }
+        }   
     }
 });
 
-export const { setLessonData, setLessonErrors } = addLessonSlice.actions;
+export const { editLessonData, editLessonErrors } = editLessonSlice.actions;
 
-export default addLessonSlice.reducer;
+export default editLessonSlice.reducer;
