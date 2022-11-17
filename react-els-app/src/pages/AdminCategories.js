@@ -1,20 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
+import axios from '../api/axios';
 import DefaultButton from '../components/atoms/DefaultButton';
 import TableCell from '../components/atoms/TableCell';
 import TableHeader from '../components/atoms/TableHeader';
-import { map } from 'lodash';
+import { map, omit } from 'lodash';
 import FetchLessons from '../components/templates/FetchLessons';
+import LinkButton from '../components/atoms/LinkButton';
+import ModalForm from '../components/organisms/ModalForm';
+import HeaderError from '../components/atoms/HeaderError';
+import { deleteLessonKey, setDeleteError } from '../redux/deleteLesson';
+import { setLessonsData } from '../redux/lessons';
 
 const AdminCategories = () => {
     const { lessonsData, lessonsError } = useSelector(state => state.lessons);
+    const { deleteKey, deleteError } = useSelector(state => state.deleteLesson);
+    const { token } = useSelector(state => state.persist.userAuthentication);
+    const [ isOpen, setIsOpen ] = useState(false);
+    const dispatch = useDispatch();
 
+    const axiosConfig = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const onDelete = (id) => {
+        setIsOpen(true);
+        dispatch(setDeleteError(''));
+        dispatch(deleteLessonKey(id));
+    }
+
+    const submitDelete = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await axios.post(`/admin/categories/${lessonsData[deleteKey].id}/delete`, lessonsData[deleteKey], axiosConfig);            
+            
+            const lessons = map(omit(lessonsData, [deleteKey]), function(value) {
+                return value;
+            });
+
+            dispatch(setLessonsData(lessons));
+            dispatch(setDeleteError(''));
+            dispatch(deleteLessonKey({}));
+
+            setIsOpen(false);
+        }
+        catch (error) {
+            if(error.response.status === 404) {
+                dispatch(setDeleteError('Lesson not found'));
+                return;
+            }
+
+            if(error.response.status === 401) {
+                dispatch(setDeleteError('Administrative Privileges Required'));
+                return;
+            }
+
+            if(error.response.status === 500) {
+                dispatch(setDeleteError('No response from the server'));
+                return;
+            }
+            
+            dispatch(setDeleteError('Delete Lesson Failed'));
+        }
+    }
+    
     FetchLessons();
 
     return (
         <section>
+            <ModalForm isOpen={isOpen} onSubmit={submitDelete} onClose={() => setIsOpen(false)} modalHeader='Confirm Delete' submitText='Delete' btnBgColor='bg-red-500 hover:bg-red-700 focus:outline-red-500'>
+                <HeaderError>{deleteError}</HeaderError>
+                Are you sure you want to delete?
+            </ModalForm>
             <div className='flex flex-col w-full lg:w-3/4 mx-auto mt-4'>
                 <Link to='/admin/categories/add' className='self-end'>
                     <DefaultButton btnType='button' custStyle='w-36'>Add lesson</DefaultButton>
@@ -38,7 +100,7 @@ const AdminCategories = () => {
                                     <div className='grid grid-rows-3 divide-y lg:grid-rows-none lg:grid-cols-3 lg:divide-x lg:divide-y-0 divide-blue-300'>
                                         <Link className='flex justify-center items-center'>Add word</Link>
                                         <Link to={`/admin/categories/${value.id}/edit`} className='flex justify-center items-center'>Edit</Link>
-                                        <Link className='flex justify-center items-center'>Delete</Link>
+                                        <LinkButton onClick={() => onDelete(key)} custStyle='flex justify-center items-center'>Delete</LinkButton>
                                     </div>
                                 </TableCell>
                             </tr>

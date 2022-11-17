@@ -23,4 +23,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::group(['middleware' => ['auth:sanctum', 'auth.admin']], function () {
     Route::post('/admin/categories/add', [LessonsController::class, 'store']);
     Route::post('/admin/categories/{id}/edit', [LessonsController::class, 'update']);
+    Route::post('/admin/categories/{id}/delete', [LessonsController::class, 'destroy']);
 });
