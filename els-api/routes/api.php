@@ -15,8 +15,12 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/categories', [LessonsController::class, 'lessons']);
+    Route::get('/categories/{id}', [LessonsController::class, 'lesson']);
+});
+
+//Admin routes
+Route::group(['middleware' => ['auth:sanctum', 'auth.admin']], function () {
     Route::post('/admin/categories/add', [LessonsController::class, 'store']);
-    Route::post('/admin/categories/{lessonId}/edit', [LessonsController::class, 'update']);
-    Route::get('/categories', [LessonsController::class, 'view']);
-    Route::get('/categories/{id}', [LessonsController::class, 'view']);
+    Route::post('/admin/categories/{id}/edit', [LessonsController::class, 'update']);
 });

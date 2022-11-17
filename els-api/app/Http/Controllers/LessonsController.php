@@ -9,21 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LessonsController extends Controller
 {
-    public function view($id = null) {
-        $lessons = Lessons::orderBy('created_at', 'desc')->get();
-        $lesson = Lessons::find($id);
+    public function lesson($id) {
+        return Lessons::findOrFail($id);
+    }
 
-        if($id && !$lesson) {
-            return response()->json([
-                'errors' => ['header' => 'Lesson not found'],
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        if($lesson) {
-            return response()->json([
-                'lesson' => $lesson,
-            ]);
-        }
+    public function lessons() {
+        $lessons = Lessons::latest()->get();
 
         return response()->json([
             'lessons' => $lessons,
@@ -42,12 +33,6 @@ class LessonsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if(!(auth()->user()->type === 'admin')) {
-            return response()->json([
-                'errors' => ['header' => 'Administrative Privileges Required'],
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
         Lessons::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -58,7 +43,7 @@ class LessonsController extends Controller
         ]);
     }
 
-    public function update(Request $request, $lessonId) {
+    public function update(Request $request, $id) {
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'max:255'],
             'description' => ['required'],
@@ -70,21 +55,7 @@ class LessonsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if(!(auth()->user()->type === 'admin')) {
-            return response()->json([
-                'errors' => ['header' => 'Administrative Privileges Required'],
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $lesson = Lessons::find($lessonId);
-
-        if(!$lesson) {
-            return response()->json([
-                'errors' => ['header' => 'Lesson not found'],
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $lesson->update([
+        Lessons::findOrFail($id)->update([
             'title' => $request->title,
             'description' => $request->description,
         ]);

@@ -29,7 +29,7 @@ const EditLesson = () => {
             try {
                 const response = await axios.get(`/categories/${params.id}`, axiosConfig);
 
-                map(response.data.lesson, function(value, key) {
+                map(response.data, function(value, key) {
                     dispatch(editLessonData({key, value}));
                 });
 
@@ -37,9 +37,7 @@ const EditLesson = () => {
             }
             catch(error) {
                 if(error.response.status === 404) {
-                    map(error.response.data.errors, function(value, key){
-                        dispatch(editLessonErrors({key, value}));
-                    });
+                    dispatch(editLessonErrors({key: 'header', value: 'Lesson not found'}));
                     return;
                 }
 
@@ -77,10 +75,20 @@ const EditLesson = () => {
                 dispatch(editLessonErrors({key, value: ''}));
             });
 
-            if( (error.response.status === 400) || (error.response.status === 401) ) {
+            if(error.response.status === 400) {
                 map(error.response.data.errors, function(value, key){
                     dispatch(editLessonErrors({key, value}));
                 });
+                return;
+            }
+
+            if(error.response.status === 401) {
+                dispatch(editLessonErrors({key: 'header', value: 'Administrative Privileges Required'}));
+                return;
+            }
+
+            if(error.response.status === 404) {
+                dispatch(editLessonErrors({key: 'header', value: 'Lesson not found'}));
                 return;
             }
 

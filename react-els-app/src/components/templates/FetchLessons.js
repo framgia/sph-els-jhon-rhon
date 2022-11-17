@@ -21,7 +21,7 @@ const FetchLessons = () => {
         try {
             const response = await axios.get('/categories', axiosConfig);
 
-            dispatch(setLessonsData(response.data.lessons));
+            dispatch(await setLessonsData(response.data.lessons));
         }
         catch (error) {
             dispatch(setLessonsError());

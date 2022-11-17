@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { map } from 'lodash';
 import { useNavigate } from 'react-router-dom';
@@ -44,10 +44,15 @@ const AddLesson = () => {
                 dispatch(setLessonErrors({key, value: ''}));
             });
 
-            if( (error.response.status === 400) || (error.response.status === 401) ) {
+            if(error.response.status === 400) {
                 map(error.response.data.errors, function(value, key){
                     dispatch(setLessonErrors({key, value}));
                 });
+                return;
+            }
+            
+            if(error.response.status === 401) {
+                dispatch(setLessonErrors({key: 'header', value: 'Administrative Privileges Required'}));
                 return;
             }
 
