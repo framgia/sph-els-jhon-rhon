@@ -25,7 +25,7 @@ class maxWord implements Rule
      */
     public function passes($attribute, $value)
     {
-        $this->wordCount = str_word_count($value, 0);
+        $this->wordCount = count(explode(' ', $value));
         return $this->wordCount <= $this->params;
     }
 
