@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Lessons extends Model
+class Words extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
-    public function words() {
-        return $this->hasMany(Words::class);
+    public function lesson() {
+        return $this->belongsTo(Lessons::class);
+    }
+
+    public function choices() {
+        return $this->hasMany(Choices::class);
     }
 }

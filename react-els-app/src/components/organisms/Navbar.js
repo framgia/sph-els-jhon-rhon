@@ -7,11 +7,11 @@ import { roles } from '../../redux/roles';
 
 const Navbar = () => {
     return (
-        <nav className='container w-auto mx-auto bg-blue-300 py-6 px-60'>
+        <nav className='w-full mx-auto bg-blue-300 py-6 px-5 lg:px-60'>
             <div className='flex flex-row justify-between'>
-                <div className='flex flex-row space-x-5'>
+                <div className='flex flex-row space-x-1 lg:space-x-5'>
                     <Link to='/'>
-                        <div className='flex text-2xl items-end'>
+                        <div className='flex text-center lg:text-left w-32 lg:w-auto text-2xl'>
                             E-Learning System
                         </div>
                     </Link>
@@ -20,7 +20,7 @@ const Navbar = () => {
                         <div className='flex items-center'>Admin</div>
                     </ProtectedTags>
                 </div>
-                <div className='flex flex-row space-x-10 items-center'>
+                <div className='flex flex-col lg:flex-row space-x-10 items-center'>
                     <ProtectedTags allowedRoles={[roles.ADMIN]}>
                     <Link to='/admin/categories'>Categories</Link>
                     </ProtectedTags>

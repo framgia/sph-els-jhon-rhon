@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,5 @@ Route::group(['middleware' => ['auth:sanctum', 'auth.admin']], function () {
     Route::post('/admin/categories/add', [LessonsController::class, 'store']);
     Route::post('/admin/categories/{id}/edit', [LessonsController::class, 'update']);
     Route::post('/admin/categories/{id}/delete', [LessonsController::class, 'destroy']);
+    Route::post('/admin/categories/{lessonId}/words/add', [WordsController::class, 'store']);
 });

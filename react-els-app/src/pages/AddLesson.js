@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { map } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
 import axios from '../api/axios';
+import Section from '../components/atoms/Section';
 import FormTemplate from '../components/templates/FormTemplate';
 import SubmitButton from '../components/atoms/SubmitButton';
 import LessonInput from '../components/molecules/LessonInput';
@@ -38,7 +39,7 @@ const AddLesson = () => {
                 dispatch(setLessonErrors({key, value: ''}));
             });
 
-            navigate('/admin/categories');
+            navigate('/admin/categories', {replace: true});
         }
         catch (error) {
             map(lessonErrors, function(value, key){
@@ -67,17 +68,19 @@ const AddLesson = () => {
     }
 
     return (
-        <section>
-            <div className='w-full lg:w-1/3 mx-auto mt-6'>
+        <Section>
+            <div className='container w-full lg:w-1/3 mx-auto mt-6'>
                 <BackButton />
             </div>
             <FormTemplate onSubmit={onSubmit} formHeader='Add Lesson'>
                 <HeaderError>{lessonErrors.header}</HeaderError>
                 <LessonInput value={lessonData.title} onChange={(e) => dispatch(setLessonData({key: 'title', value: e.target.value}))} errorMessage={lessonErrors.title} inputType='text' inputName='title' inputLabel='Title' />
                 <LessonTextarea value={lessonData.description} onChange={(e) => dispatch(setLessonData({key: 'description', value: e.target.value}))} errorMessage={lessonErrors.description} textareaName='description' textareaLabel='Description' />
-                <SubmitButton buttonText='Add' custStyle='mt-5' />
+                <div className='flex justify-center'>
+                    <SubmitButton buttonText='Add' custStyle='mt-5' />
+                </div>
             </FormTemplate>
-        </section>
+        </Section>
     );
 }
 

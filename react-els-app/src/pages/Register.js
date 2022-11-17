@@ -63,8 +63,8 @@ const Register = () => {
                 <AuthInput inputLabel='Last Name' value={registerData.lname} inputType='text' onChange={(e) => dispatch(setRegisterData({key: 'lname', value: e.target.value}))} inputName='lname' errorMessage={registerErrors.lname}/>
                 <AuthInput inputLabel='Email' value={registerData.email} inputType='email' onChange={(e) => dispatch(setRegisterData({key: 'email', value: e.target.value}))} inputName='email' errorMessage={registerErrors.email}/>
                 <AuthInput inputLabel='Password' value={registerData.password} inputType='password' onChange={(e) => dispatch(setRegisterData({key: 'password', value: e.target.value}))} inputName='password' errorMessage={registerErrors.password}/>
-                <div className='flex justify-end pt-5'>
-                    <SubmitButton buttonText='Submit' />
+                <div className='flex justify-center'>
+                    <SubmitButton buttonText='Submit' custStyle='mt-5' />
                 </div>
             </FormTemplate>
         </section>

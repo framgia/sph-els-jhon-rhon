@@ -11,6 +11,7 @@ import LessonTextarea from '../components/molecules/LessonTextarea';
 import { editLessonData, editLessonErrors } from '../redux/editLesson';
 import HeaderError from '../components/atoms/HeaderError';
 import BackButton from '../components/molecules/BackButton';
+import Section from '../components/atoms/Section';
 
 const EditLesson = () => {
     const { lessonData, lessonErrors } = useSelector(state => state.editLesson);
@@ -69,7 +70,7 @@ const EditLesson = () => {
                 dispatch(editLessonErrors({key, value: ''}));
             });
 
-            navigate('/admin/categories');
+            navigate('/admin/categories', {replace: false});
         }
         catch (error) {
             map(lessonErrors, function(value, key){
@@ -103,17 +104,19 @@ const EditLesson = () => {
     }
 
     return (
-        <section>
-            <div className='w-full lg:w-1/3 mx-auto mt-6'>
+        <Section>
+            <div className='container w-full lg:w-1/3 mx-auto mt-6'>
                 <BackButton />
             </div>
             <FormTemplate onSubmit={onSubmit} formHeader='Edit Lesson'>
                 <HeaderError>{lessonErrors.header}</HeaderError>
                 <LessonInput value={lessonData.title} onChange={(e) => dispatch(editLessonData({key: 'title', value: e.target.value}))} errorMessage={lessonErrors.title} inputType='text' inputName='title' inputLabel='Title' />
                 <LessonTextarea value={lessonData.description} onChange={(e) => dispatch(editLessonData({key: 'description', value: e.target.value}))} errorMessage={lessonErrors.description} textareaName='description' textareaLabel='Description' />
-                <SubmitButton buttonText='Update' custStyle='mt-5' />
+                <div className='flex justify-center'>
+                    <SubmitButton buttonText='Update' custStyle='mt-5' />
+                </div>
             </FormTemplate>
-        </section>
+        </Section>
     );
 }
 

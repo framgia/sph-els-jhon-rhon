@@ -6,7 +6,7 @@ const SubmitButton = ({ buttonText, custStyle = '', bgColor = '' }) => {
     return (
        <button 
        type='submit'
-       className={`py-3 px-6 rounded-md text-white w-full rounded-md focus:outline ${bgColor} ${custStyle}`}
+       className={`py-3 px-6 rounded-md text-white w-full lg:max-w-xl rounded-md focus:outline ${bgColor} ${custStyle}`}
        >
            {buttonText}
        </button>

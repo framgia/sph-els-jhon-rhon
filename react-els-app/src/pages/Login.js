@@ -64,8 +64,8 @@ const Login = () => {
                 <HeaderError>{loginErrors.header}</HeaderError>
                 <AuthInput inputLabel='Email' value={loginData.email} onChange={(e) => dispatch(setLoginData({key: 'email', value: e.target.value}))} errorMessage={loginErrors.email} inputType='email' inputName='email'/>
                 <AuthInput inputLabel='Password' value={loginData.password} onChange={(e) => dispatch(setLoginData({key: 'password', value: e.target.value}))} errorMessage={loginErrors.password} inputType='password' inputName='password'/>
-                <div className='flex justify-end pt-5'>
-                    <SubmitButton buttonText='Login' />
+                <div className='flex justify-center'>
+                    <SubmitButton buttonText='Login' custStyle='mt-5' />
                 </div>
             </FormTemplate>
         </section>

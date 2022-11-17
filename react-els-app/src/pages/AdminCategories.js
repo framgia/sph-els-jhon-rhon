@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,6 +13,7 @@ import ModalForm from '../components/organisms/ModalForm';
 import HeaderError from '../components/atoms/HeaderError';
 import { deleteLessonKey, setDeleteError } from '../redux/deleteLesson';
 import { setLessonsData } from '../redux/lessons';
+import Section from '../components/atoms/Section';
 
 const AdminCategories = () => {
     const { lessonsData, lessonsError } = useSelector(state => state.lessons);
@@ -72,7 +73,7 @@ const AdminCategories = () => {
     FetchLessons();
 
     return (
-        <section>
+        <Section>
             <ModalForm isOpen={isOpen} onSubmit={submitDelete} onClose={() => setIsOpen(false)} modalHeader='Confirm Delete' submitText='Delete' btnBgColor='bg-red-500 hover:bg-red-700 focus:outline-red-500'>
                 <HeaderError>{deleteError}</HeaderError>
                 Are you sure you want to delete?
@@ -98,9 +99,9 @@ const AdminCategories = () => {
                                 <TableCell custStyle={`${cellColor} p-2`}>{value.description}</TableCell>
                                 <TableCell custStyle={`${cellColor} p-2`}>
                                     <div className='grid grid-rows-3 divide-y lg:grid-rows-none lg:grid-cols-3 lg:divide-x lg:divide-y-0 divide-blue-300'>
-                                        <Link className='flex justify-center items-center'>Add word</Link>
-                                        <Link to={`/admin/categories/${value.id}/edit`} className='flex justify-center items-center'>Edit</Link>
-                                        <LinkButton onClick={() => onDelete(key)} custStyle='flex justify-center items-center'>Delete</LinkButton>
+                                        <Link to={`/admin/categories/${value.id}/words/add`} className='grid justify-center items-center p-2 lg:p-0'>Add word</Link>
+                                        <Link to={`/admin/categories/${value.id}/edit`} className='grid justify-center items-center p-2 lg:p-0'>Edit</Link>
+                                        <LinkButton onClick={() => onDelete(key)} custStyle='grid justify-center items-center p-2 lg:p-0'>Delete</LinkButton>
                                     </div>
                                 </TableCell>
                             </tr>
@@ -109,7 +110,7 @@ const AdminCategories = () => {
                 }</tbody>
                 </table>
             </div>
-        </section>
+        </Section>
     );
 }
 

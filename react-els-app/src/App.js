@@ -9,6 +9,7 @@ import { roles } from './redux/roles';
 import AdminCategories from './pages/AdminCategories';
 import AddLesson from './pages/AddLesson';
 import EditLesson from './pages/EditLesson';
+import AddWord from './pages/AddWord';
 
 const App = () => {
     return (
@@ -28,6 +29,9 @@ const App = () => {
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories/:id/edit' element={<EditLesson />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
+                    <Route path='/admin/categories/:lessonId/words/add' element={<AddWord />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
                     <Route path='/login' element={<Login />} />
