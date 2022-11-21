@@ -57,7 +57,7 @@ const AddWord = () => {
         try {
             const response = await axios.post(`/admin/categories/${params.lessonId}/words/add`, wordData, axiosConfig);
 
-            navigate('/admin/categories', {replace: true});
+            navigate(-1, {replace: true});
         }
         catch (error) {
             map(wordErrors, function(value, key){

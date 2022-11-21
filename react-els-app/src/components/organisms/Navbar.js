@@ -22,7 +22,7 @@ const Navbar = () => {
                 </div>
                 <div className='flex flex-col lg:flex-row space-x-10 items-center'>
                     <ProtectedTags allowedRoles={[roles.ADMIN]}>
-                    <Link to='/admin/categories'>Categories</Link>
+                        <Link to='/admin/categories'>Categories</Link>
                     </ProtectedTags>
                     <ProtectedTags allowedRoles={[roles.AUTHENTICATED]}>
                         <Link to='/categories'>Categories</Link>

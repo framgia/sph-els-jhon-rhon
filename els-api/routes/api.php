@@ -18,6 +18,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/categories', [LessonsController::class, 'lessons']);
     Route::get('/categories/{id}', [LessonsController::class, 'lesson']);
+    Route::get('/categories/{lessonId}/words', [WordsController::class, 'words']);
 });
 
 //Admin routes

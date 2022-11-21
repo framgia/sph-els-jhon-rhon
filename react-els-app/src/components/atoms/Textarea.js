@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Textarea = ({ value, textareaName, onChange, isError, custStyle = '' }) => {
     const errorStyle = (isError)? 'border-red-300 outline-red-300': 'border-blue-300 outline-blue-300';

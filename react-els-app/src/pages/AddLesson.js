@@ -39,7 +39,7 @@ const AddLesson = () => {
                 dispatch(setLessonErrors({key, value: ''}));
             });
 
-            navigate('/admin/categories', {replace: true});
+            navigate(-1, {replace: true});
         }
         catch (error) {
             map(lessonErrors, function(value, key){

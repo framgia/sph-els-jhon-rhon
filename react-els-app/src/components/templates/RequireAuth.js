@@ -1,6 +1,6 @@
-import { Navigate, useLocation, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { roles } from "../../redux/roles";
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { roles } from '../../redux/roles';
 
 const RequireAuth = ({ allowedRoles }) => {
     const { user, isLoggedIn } = useSelector(state => state.persist.userAuthentication);

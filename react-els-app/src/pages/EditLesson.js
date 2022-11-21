@@ -70,7 +70,7 @@ const EditLesson = () => {
                 dispatch(editLessonErrors({key, value: ''}));
             });
 
-            navigate('/admin/categories', {replace: false});
+            navigate(-1, {replace: true});
         }
         catch (error) {
             map(lessonErrors, function(value, key){

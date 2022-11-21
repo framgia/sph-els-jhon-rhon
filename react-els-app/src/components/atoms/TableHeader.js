@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 const TableHeader = ({  children, custStyle = ''}) => {
     return (
-        <td className={`border border-blue-500 text-white border-solid p-2 bg-blue-500 font-semibold text-center ${custStyle}`}>
+        <th className={`border-b-2 border-blue-300 border-solid bg-blue-200 font-semibold text-start align-center ${custStyle}`}>
             {children}
-        </td>
+        </th>
     );
 }
 

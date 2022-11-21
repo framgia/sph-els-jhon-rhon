@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const addLessonSlice = createSlice({
     name: 'addLesson',
@@ -19,7 +19,7 @@ export const addLessonSlice = createSlice({
         },
         setLessonErrors: (state, action) => {
             state.lessonErrors = { ...state.lessonErrors, [action.payload.key]: action.payload.value };
-        }
+        }   
     }
 });
 

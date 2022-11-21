@@ -10,6 +10,7 @@ import AdminCategories from './pages/AdminCategories';
 import AddLesson from './pages/AddLesson';
 import EditLesson from './pages/EditLesson';
 import AddWord from './pages/AddWord';
+import Lesson from './pages/Lesson';
 
 const App = () => {
     return (
@@ -26,6 +27,9 @@ const App = () => {
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories/add' element={<AddLesson />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
+                    <Route path='/admin/categories/:id' element={<Lesson />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories/:id/edit' element={<EditLesson />} />

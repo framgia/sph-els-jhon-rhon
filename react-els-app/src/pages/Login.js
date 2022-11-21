@@ -10,6 +10,7 @@ import SubmitButton from '../components/atoms/SubmitButton';
 import HeaderError from '../components/atoms/HeaderError';
 import { setLoginData, setLoginErrors } from '../redux/userLogin';
 import { loginUser } from '../redux/userAuthentication';
+import Section from '../components/atoms/Section';
 
 const Login = () => {
     const { loginData, loginErrors } = useSelector(state => state.userLogin);
@@ -59,7 +60,7 @@ const Login = () => {
     }
 
     return (
-        <section>
+        <Section>
             <FormTemplate onSubmit={onSubmit} formHeader='Log-in'>
                 <HeaderError>{loginErrors.header}</HeaderError>
                 <AuthInput inputLabel='Email' value={loginData.email} onChange={(e) => dispatch(setLoginData({key: 'email', value: e.target.value}))} errorMessage={loginErrors.email} inputType='email' inputName='email'/>
@@ -68,7 +69,7 @@ const Login = () => {
                     <SubmitButton buttonText='Login' custStyle='mt-5' />
                 </div>
             </FormTemplate>
-        </section>
+        </Section>
     );
 }
 

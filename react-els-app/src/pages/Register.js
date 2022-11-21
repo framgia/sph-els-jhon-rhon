@@ -10,6 +10,7 @@ import FormTemplate from '../components/templates/FormTemplate';
 import HeaderError from '../components/atoms/HeaderError';
 import { setRegisterData, setRegisterErrors } from '../redux/userRegister';
 import { loginUser } from '../redux/userAuthentication';
+import Section from '../components/atoms/Section';
 
 const Register = () => {
     const { registerData, registerErrors } = useSelector(state => state.userRegister);
@@ -56,7 +57,7 @@ const Register = () => {
     }
 
     return (
-        <section>
+        <Section>
             <FormTemplate onSubmit={onSubmit} formHeader='Register'>
                 <HeaderError>{registerErrors.header}</HeaderError>
                 <AuthInput inputLabel='First Name' value={registerData.fname} inputType='text' onChange={(e) => dispatch(setRegisterData({key: 'fname', value: e.target.value}))} inputName='fname' errorMessage={registerErrors.fname}/>
@@ -67,7 +68,7 @@ const Register = () => {
                     <SubmitButton buttonText='Submit' custStyle='mt-5' />
                 </div>
             </FormTemplate>
-        </section>
+        </Section>
     );
 }
 

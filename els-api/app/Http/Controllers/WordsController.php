@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WordsController extends Controller
 {
+    public function words($lessonId) {
+        return Lessons::findOrFail($lessonId)->words->sortByDesc('created_at')->paginate(10);
+    }
+
     public function store(Request $request, $lessonId) {
         $validator = Validator::make($request->all(), [
             'word' => ['required', new maxWord(1)],
