@@ -28,10 +28,14 @@ class WordsController extends Controller
         }
 
         $word = Lessons::findOrFail($lessonId)->words()->create(['word' => $request->word]);
-        $word->choices()->create(['choice' => $request->answer, 'answer' => true]);
-        $word->choices()->create(['choice' => $request->choice2, 'answer' => false]);
-        $word->choices()->create(['choice' => $request->choice3, 'answer' => false]);
-        $word->choices()->create(['choice' => $request->choice4, 'answer' => false]);
+        $choices = [
+            ['words_id' => $word->id, 'choice' => $request->answer, 'answer' => true],
+            ['words_id' => $word->id, 'choice' => $request->choice2, 'answer' => false],
+            ['words_id' => $word->id, 'choice' => $request->choice3, 'answer' => false],
+            ['words_id' => $word->id, 'choice' => $request->choice4, 'answer' => false],
+        ];
+
+        Choices::upsert($choices, ['choice', 'answer']);
 
         return response()->json([
             'message' => 'Word and choices added successflly',
