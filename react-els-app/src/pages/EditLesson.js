@@ -10,6 +10,7 @@ import LessonInput from '../components/molecules/LessonInput';
 import LessonTextarea from '../components/molecules/LessonTextarea';
 import { editLessonData, editLessonErrors } from '../redux/editLesson';
 import HeaderError from '../components/atoms/HeaderError';
+import BackButton from '../components/molecules/BackButton';
 
 const EditLesson = () => {
     const { lessonData, lessonErrors } = useSelector(state => state.editLesson);
@@ -103,6 +104,9 @@ const EditLesson = () => {
 
     return (
         <section>
+            <div className='w-full lg:w-1/3 mx-auto mt-6'>
+                <BackButton />
+            </div>
             <FormTemplate onSubmit={onSubmit} formHeader='Edit Lesson'>
                 <HeaderError>{lessonErrors.header}</HeaderError>
                 <LessonInput value={lessonData.title} onChange={(e) => dispatch(editLessonData({key: 'title', value: e.target.value}))} errorMessage={lessonErrors.title} inputType='text' inputName='title' inputLabel='Title' />

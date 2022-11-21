@@ -17,6 +17,7 @@ import userAuthenticationReducer from './userAuthentication';
 import addLessonReducer from './addLesson';
 import lessonsReducer from './lessons';
 import editLessonReducer from './editLesson';
+import deleteLessonReducer from './deleteLesson';
 
 const persistConfig = {
     key: 'root',
@@ -37,7 +38,8 @@ export const store = configureStore ({
         persist: persistedReducer,
         addLesson: addLessonReducer,
         lessons: lessonsReducer,
-        editLesson: editLessonReducer
+        editLesson: editLessonReducer,
+        deleteLesson: deleteLessonReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

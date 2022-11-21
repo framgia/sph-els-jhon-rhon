@@ -63,6 +63,13 @@ class LessonsController extends Controller
         return response()->json([
             'message' => 'Lesson updated successfully',
         ]);
+    }
 
+    public function destroy(Request $request, $id) {
+        Lessons::findOrFail($id)->delete();
+
+        return response()->json([
+            'message' => 'Lesson deleted successfully',
+        ]);
     }
 }
