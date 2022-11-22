@@ -79,7 +79,7 @@ const AdminCategories = () => {
 
     useEffect(() => {
         FetchLessons(dispatch, token, location, searchParams, navigate);
-    }, [location]);
+    }, [dispatch, location]);
 
     if(lessonsError) {
         return <PageError>{lessonsError}</PageError>
