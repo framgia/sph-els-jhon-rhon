@@ -100,7 +100,7 @@ const AddWord = () => {
                 custStyle='divide-y-2 divide-blue-300'
                 largeWidth='lg:w-3/5'
                 headerStyle='text-start text-xl font-medium'
-                formHeader={`Add word for ${lessonData.title} lesson`}
+                formHeader={`Add word and choices for ${lessonData.title} lesson`}
             >
                 <HeaderError>{wordErrors.header}</HeaderError>
                 <div className='flex flex-col space-y-6 lg:flex-row lg:space-x-6 lg:space-y-0'>

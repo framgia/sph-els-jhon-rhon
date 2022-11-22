@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { map } from 'lodash';
 
 import axios from '../api/axios';
@@ -14,6 +14,7 @@ import Section from '../components/atoms/Section';
 import Pagination from '../components/organisms/Pagination';
 import PageError from '../components/organisms/PageError';
 import Empty from '../components/atoms/Empty';
+import Error from '../components/atoms/Error';
 
 const Lesson = () => {
     const { lesson, lessonError } = useSelector(state => state.lesson);
@@ -37,7 +38,7 @@ const Lesson = () => {
             try {
                 const lesson = await axios.get(`/categories/${params.id}`, axiosConfig);
 
-                dispatch(lessonData(lesson.data));
+                dispatch(await lessonData(lesson.data));
             }
             catch(error) {
                 if(error.response.status === 404) {
@@ -58,18 +59,17 @@ const Lesson = () => {
             const search = (searchParams.get('page') && searchParams.get('page') > 0)? location.search: '';
 
             try {
-
                 const words = await axios.get(`/categories/${params.id}/words${search}`, axiosConfig);
-
+                
                 if(!searchParams.get('page') || (searchParams.get('page') < 1)) {
                     window.history.replaceState(null, null, `${location.pathname}?page=${words.data.current_page}`);
                 }
     
-                if(!words.data.data.length) {
+                if((words.data.data.length === 0) && (words.data.last_page > 1)) {
                     navigate(`${location.pathname}?page=${words.data.last_page}`, {replace: true});
                 }
 
-                dispatch(setWordsData(words.data.data));
+                dispatch(await setWordsData(words.data.data));
                 dispatch(await setPaginateData({
                     'current_page': words.data.current_page,
                     'last_page': words.data.last_page,
@@ -92,7 +92,7 @@ const Lesson = () => {
         fetchLesson();
         fetchWords();
 
-    }, [dispatch]);
+    }, [dispatch, location]);
     
     if(lessonError) {
         return <PageError>{lessonError}</PageError>
@@ -124,7 +124,7 @@ const Lesson = () => {
                                         <div key={key} className='w-auto py-2 px-3 items-center rounded rounded-sm border border-blue-300  m-2 flex flex-row justify-between'>
                                             <div>{value.word}</div>
                                             <div className='w-90 flex flex-row space-x-1'>
-                                                <PenButton btnType='button'/>
+                                                <Link to={`/admin/categories/words/${value.id}/edit`}><PenButton btnType='button'/></Link>
                                                 <TrashButton btnType='button'/>
                                             </div>
                                         </div>

@@ -11,6 +11,7 @@ import AddLesson from './pages/AddLesson';
 import EditLesson from './pages/EditLesson';
 import AddWord from './pages/AddWord';
 import Lesson from './pages/Lesson';
+import EditWord from './pages/EditWord';
 
 const App = () => {
     return (
@@ -36,6 +37,9 @@ const App = () => {
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories/:lessonId/words/add' element={<AddWord />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
+                    <Route path='/admin/categories/words/:id/edit' element={<EditWord />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.GUEST]} />} >
                     <Route path='/login' element={<Login />} />
