@@ -29,4 +29,5 @@ Route::group(['middleware' => ['auth:sanctum', 'auth.admin']], function () {
     Route::post('/admin/categories/{id}/delete', [LessonsController::class, 'destroy']);
     Route::post('/admin/categories/{lessonId}/words/add', [WordsController::class, 'store']);
     Route::put('/admin/categories/words/{id}/edit', [WordsController::class, 'update']);
+    Route::post('/admin/categories/words/{id}/delete', [WordsController::class, 'destroy']);
 });

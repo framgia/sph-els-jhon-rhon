@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { map } from 'lodash';
@@ -14,13 +14,17 @@ import Section from '../components/atoms/Section';
 import Pagination from '../components/organisms/Pagination';
 import PageError from '../components/organisms/PageError';
 import Empty from '../components/atoms/Empty';
-import Error from '../components/atoms/Error';
+import ModalForm from '../components/organisms/ModalForm';
+import HeaderError from '../components/atoms/HeaderError';
+import { deleteWordError, deleteWordKey } from '../redux/deleteWord';
 
 const Lesson = () => {
     const { lesson, lessonError } = useSelector(state => state.lesson);
     const { paginateData } = useSelector(state => state.paginate)
     const { wordsData, wordsError } = useSelector(state => state.words);
     const { token } = useSelector(state => state.persist.userAuthentication);
+    const { deleteKey, deleteError } = useSelector(state => state.deleteWord);
+    const [ isOpen, setIsOpen ] = useState(false);
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
@@ -33,66 +37,103 @@ const Lesson = () => {
         }
     }
 
+    const fetchWords = async () => {
+        const search = (searchParams.get('page') && searchParams.get('page') > 0)? location.search: '';
+
+        try {
+            const words = await axios.get(`/categories/${params.id}/words${search}`, axiosConfig);
+            
+            if(!searchParams.get('page') || (searchParams.get('page') < 1)) {
+                window.history.replaceState(null, null, `${location.pathname}?page=${words.data.current_page}`);
+            }
+
+            if((words.data.data.length === 0) && (words.data.last_page > 1)) {
+                navigate(`${location.pathname}?page=${words.data.last_page}`, {replace: true});
+            }
+
+            dispatch(await setWordsData(words.data.data));
+            dispatch(await setPaginateData({
+                'current_page': words.data.current_page,
+                'last_page': words.data.last_page,
+                'from': words.data.from,
+                'to': words.data.to,
+                'per_page': words.data.per_page,
+                'total': words.data.total 
+            }));
+        }
+        catch(error) {
+            if(error.response.status === 500) {
+                dispatch(setWordsError('No response from the server'));
+                return;
+            }
+
+            dispatch(setWordsError('Failed to fetch words'));
+        }
+    }
+
+    const fetchLesson = async () => {
+        try {
+            const lesson = await axios.get(`/categories/${params.id}`, axiosConfig);
+
+            dispatch(await lessonData(lesson.data));
+        }
+        catch(error) {
+            if(error.response.status === 404) {
+                dispatch(setLessonError('Lesson not found'));
+                return;
+            }
+
+            if(error.response.status === 500) {
+                dispatch(setLessonError('No response from the server'));
+                return;
+            }
+
+            dispatch(setLessonError('Failed to fetch lesson'));
+        }
+    }
+
     useEffect(() => {
-        const fetchLesson = async () => {
-            try {
-                const lesson = await axios.get(`/categories/${params.id}`, axiosConfig);
-
-                dispatch(await lessonData(lesson.data));
-            }
-            catch(error) {
-                if(error.response.status === 404) {
-                    dispatch(setLessonError('Lesson not found'));
-                    return;
-                }
-
-                if(error.response.status === 500) {
-                    dispatch(setLessonError('No response from the server'));
-                    return;
-                }
-
-                dispatch(setLessonError('Failed to fetch lesson'));
-            }
-        }
-        
-        const fetchWords = async () => {
-            const search = (searchParams.get('page') && searchParams.get('page') > 0)? location.search: '';
-
-            try {
-                const words = await axios.get(`/categories/${params.id}/words${search}`, axiosConfig);
-                
-                if(!searchParams.get('page') || (searchParams.get('page') < 1)) {
-                    window.history.replaceState(null, null, `${location.pathname}?page=${words.data.current_page}`);
-                }
-    
-                if((words.data.data.length === 0) && (words.data.last_page > 1)) {
-                    navigate(`${location.pathname}?page=${words.data.last_page}`, {replace: true});
-                }
-
-                dispatch(await setWordsData(words.data.data));
-                dispatch(await setPaginateData({
-                    'current_page': words.data.current_page,
-                    'last_page': words.data.last_page,
-                    'from': words.data.from,
-                    'to': words.data.to,
-                    'per_page': words.data.per_page,
-                    'total': words.data.total 
-                }));
-            }
-            catch(error) {
-                if(error.response.status === 500) {
-                    dispatch(setWordsError('No response from the server'));
-                    return;
-                }
-
-                dispatch(setWordsError('Failed to fetch words'));
-            }
-        }
-
         fetchLesson();
         fetchWords();
-
     }, [dispatch, location]);
+
+    const onDelete = (id) => {
+        setIsOpen(true);
+        dispatch(deleteWordError(''));
+        dispatch(deleteWordKey(id));
+    }
+
+    const submitDelete = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await axios.post(`/admin/categories/words/${deleteKey}/delete`, deleteKey, axiosConfig);            
+            
+            dispatch(deleteWordError(''));
+            dispatch(deleteWordKey(''));
+
+            setIsOpen(false);
+            fetchWords();
+        }
+        catch(error) {
+            if(error.response.status === 404) {
+                dispatch(deleteWordError('Word not found'));
+                return;
+            }
+
+            if(error.response.status === 401) {
+                dispatch(deleteWordError('Administrative Privileges Required'));
+                return;
+            }
+
+            if(error.response.status === 500) {
+                dispatch(deleteWordError('No response from the server'));
+                return;
+            }
+            
+            dispatch(deleteWordError('Delete Word Failed'));
+        }
+    }
     
     if(lessonError) {
         return <PageError>{lessonError}</PageError>
@@ -100,6 +141,10 @@ const Lesson = () => {
 
     return (
         <Section>
+            <ModalForm isOpen={isOpen} onSubmit={submitDelete} onClose={() => setIsOpen(false)} modalHeader='Confirm Delete' submitText='Delete' btnBgColor='bg-red-500 hover:bg-red-700 focus:outline-red-500'>
+                <HeaderError></HeaderError>
+                Are you sure you want to delete?
+            </ModalForm>
             <div className='container w-full lg:w-1/2 mx-auto mt-6'>
                 <BackButton />
             </div>
@@ -125,14 +170,14 @@ const Lesson = () => {
                                             <div>{value.word}</div>
                                             <div className='w-90 flex flex-row space-x-1'>
                                                 <Link to={`/admin/categories/words/${value.id}/edit`}><PenButton btnType='button'/></Link>
-                                                <TrashButton btnType='button'/>
+                                                <TrashButton onClick={() => onDelete(value.id)} btnType='button'/>
                                             </div>
                                         </div>
                                     );
                                 }
                             })
                         }
-                    <Empty data={wordsData}>No words to show...</Empty>
+                    <Empty data={wordsData}><div className='w-full'>No words to show...</div></Empty>
                     </div>
                 </div>   
                 <Pagination paginateData={paginateData} />

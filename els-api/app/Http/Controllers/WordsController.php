@@ -101,4 +101,12 @@ class WordsController extends Controller
             'message' => 'Word and choices updated successflly',
         ]);
     }
+
+    public function destroy($id) {
+        Words::findOrFail($id)->delete();
+
+        return response()->json([
+            'message' => 'Word deleted successfully',
+        ]);
+    }
 }
