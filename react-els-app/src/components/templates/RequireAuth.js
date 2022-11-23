@@ -18,6 +18,12 @@ const RequireAuth = ({ allowedRoles }) => {
     if(!isLoggedIn && (allowedRoles?.includes(roles.ADMIN))) {
         return <Navigate to='/login' state={{ from: location }} replace />;
     }
+    if(isLoggedIn && !(user.type === roles.STUDENT) && (allowedRoles?.includes(roles.STUDENT))) {
+        return <Navigate to='/'/>;
+    }
+    if(!isLoggedIn && (allowedRoles?.includes(roles.STUDENT))) {
+        return <Navigate to='/login' state={{ from: location }} replace />;
+    }
 
     return <Outlet />;
 }
