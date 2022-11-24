@@ -3,9 +3,9 @@ import React from 'react';
 const Empty = ({ children, data }) => {
     if(data.length === 0) {
         return (
-            <div className='w-full'>
+            <React.Fragment>
                 {children}
-            </div>
+            </React.Fragment>
         );
     }
 }

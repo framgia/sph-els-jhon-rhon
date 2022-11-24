@@ -23,6 +23,7 @@ import paginateReducer from './paginate';
 import lessonReducer from './lesson';
 import wordsReducer from './words';
 import editWordReducer from './editWord';
+import deleteWordReducer from './deleteWord';
 
 const persistConfig = {
     key: 'root',
@@ -49,7 +50,8 @@ export const store = configureStore ({
         paginate: paginateReducer,
         lesson: lessonReducer,
         words: wordsReducer,
-        editWord: editWordReducer
+        editWord: editWordReducer,
+        deleteWord: deleteWordReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -48,7 +48,7 @@ const AdminCategories = () => {
             const response = await axios.post(`/admin/categories/${lessonsData[deleteKey].id}/delete`, lessonsData[deleteKey], axiosConfig);            
             
             dispatch(setDeleteError(''));
-            dispatch(deleteLessonKey({}));
+            dispatch(deleteLessonKey(''));
 
             setIsOpen(false);
             FetchLessons(dispatch, token, location, searchParams, navigate);
@@ -124,7 +124,9 @@ const AdminCategories = () => {
                             </React.Fragment>
                         );                                
                     })
-                }</tbody>
+                }
+                <Empty data={lessonsData}><tr><td className='p-4 col-span-3'>No Lessons to show...</td></tr></Empty>
+                </tbody>
                 </table>
                 <Pagination paginateData={paginateData} />
             </div>
