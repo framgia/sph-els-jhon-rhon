@@ -4,19 +4,21 @@ export const wordsSlice = createSlice({
     name: 'words',
     initialState: {
         wordsData: {},
-        wordsError: ''
+        wordsError: {
+            header: ''
+        }
     },
     reducers: {
         setWordsData: (state, action) => {
-            state.wordsError = '';
+            state.wordsError = {};
             state.wordsData = action.payload;
         },
         setWordsError: (state, action) => {
             if (action.paylad) {
-                state.wordsError = action.payload;
+                state.wordsError = {...state.wordsError, [action.payload.key]: action.payload.value};
             }
-
-            state.wordsError = 'Failed to fetch words';
+            
+            state.wordsError = {...state.wordsError, header: 'Failed to fetch words'};
         }
     }
 });

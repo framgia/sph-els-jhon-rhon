@@ -4,15 +4,17 @@ export const lessonSlice = createSlice({
     name: 'lesson',
     initialState: {
         lesson: {},
-        lessonError: ''
+        lessonError: {
+            header: ''
+        },
     },
     reducers: {
         lessonData: (state, action) => {
-            state.lessonError = '';
+            state.lessonError = {};
             state.lesson = action.payload;
         },
         setLessonError: (state, action) => {
-            state.lessonError = action.payload;
+            state.lessonError = {...state.lessonError, [action.payload.key]: action.payload.value};
         }
     }
 });
