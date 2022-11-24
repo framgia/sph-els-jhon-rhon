@@ -22,7 +22,7 @@ const FetchLessons = (dispatch, token, location, searchParams, navigate) => {
                 window.history.replaceState(null, null, `${location.pathname}?page=${lessons.current_page}`);
             }
 
-            if(!lessons.data.length) {
+            if((lessons.data.length === 0) && (lessons.last_page > 1)) {
                 navigate(`${location.pathname}?page=${lessons.last_page}`, {replace: true});
             }
 

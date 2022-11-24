@@ -11,16 +11,16 @@ const Pagination = ({ paginateData }) => {
 
     const prevPage = () => {
         if(paginateData.current_page > 1) {
-            navigate(`${location.pathname}?page=${paginateData.current_page-1}`);
+            navigate(`${location.pathname}?page=${paginateData.current_page-1}`, { replace: true });
         }   
     }
     const nextPage = () => {
         if(paginateData.last_page > paginateData.current_page) {
-            navigate(`${location.pathname}?page=${paginateData.current_page+1}`);
+            navigate(`${location.pathname}?page=${paginateData.current_page+1}`, { replace: true });
         }   
     }
     const numberClick = (number) => {
-        navigate(`${location.pathname}?page=${number}`);
+        navigate(`${location.pathname}?page=${number}`, { replace: true });
     }
     if(!(paginateData.last_page === 1)) {
         return (

@@ -60,7 +60,7 @@ const EditLesson = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`/admin/categories/${params.id}/edit`, lessonData, axiosConfig);
+            const response = await axios.put(`/admin/categories/${params.id}/edit`, lessonData, axiosConfig);
 
             map(lessonData, function(value, key){
                 dispatch(editLessonData({key, value: ''}));
