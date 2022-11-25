@@ -12,7 +12,10 @@ import EditLesson from './pages/EditLesson';
 import AddWord from './pages/AddWord';
 import Lesson from './pages/Lesson';
 import EditWord from './pages/EditWord';
+<<<<<<< HEAD
 import Categories from './pages/Categories';
+=======
+>>>>>>> ad189fdb1f23a21a59f45b346a5cff85a6c18b37
 
 const App = () => {
     return (
