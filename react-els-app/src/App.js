@@ -12,6 +12,7 @@ import EditLesson from './pages/EditLesson';
 import AddWord from './pages/AddWord';
 import Lesson from './pages/Lesson';
 import EditWord from './pages/EditWord';
+import Categories from './pages/Categories';
 
 const App = () => {
     return (
@@ -20,8 +21,8 @@ const App = () => {
 
             <Routes>
                 <Route path='/' element='home' />
-                <Route element={<RequireAuth allowedRoles={[roles.AUTHENTICATED]} />} >
-                    <Route path='/categories' element='Categories' />
+                <Route element={<RequireAuth allowedRoles={[roles.STUDENT]} />} >
+                    <Route path='/categories' element={<Categories />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories' element={<AdminCategories />} />
