@@ -36,6 +36,6 @@ class ResultsController extends Controller
     }
 
     public function completed() {
-        return Results::all();
+        return Results::where('users_id', '=', auth()->user()->id)->get();
     }
 }
