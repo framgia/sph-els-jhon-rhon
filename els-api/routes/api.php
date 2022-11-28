@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/words/{id}/choices', [ChoicesController::class, 'choices']);
         Route::get('/{lessonId}/words', [WordsController::class, 'words']);
         Route::post('/{lessonId}/answers', [AnswerController::class, 'store']);
+        Route::get('/{lessonId}/results', [ResultsController::class, 'results']);
+        Route::get('/results/completed', [ResultsController::class, 'completed']);
     });
 });
 

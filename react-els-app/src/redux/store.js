@@ -26,6 +26,8 @@ import editWordReducer from './editWord';
 import deleteWordReducer from './deleteWord';
 import answerReducer from './answer';
 import choicesReducer from './choices';
+import resultsReducer from './results';
+import lessonsCompletedReducer from './lessonsCompleted';
 
 const persistConfig = {
     key: 'root',
@@ -55,7 +57,9 @@ export const store = configureStore ({
         editWord: editWordReducer,
         deleteWord: deleteWordReducer,
         answer: answerReducer,
-        choices: choicesReducer
+        choices: choicesReducer,
+        results: resultsReducer,
+        lessonsCompleted: lessonsCompletedReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

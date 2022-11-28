@@ -4,19 +4,21 @@ import { useSelector } from 'react-redux';
 
 import axios from '../api/axios';
 import Empty from '../components/atoms/Empty';
-import LessonCard from '../components/atoms/LessonCard';
+import LessonCard from '../components/organisms/LessonCard';
 import Section from '../components/atoms/Section';
 import BackButton from '../components/molecules/BackButton';
 import PageError from '../components/organisms/PageError';
 import Pagination from '../components/organisms/Pagination';
 import FetchLessons from '../components/templates/FetchLessons';
 import { Imports } from '../components/templates/Imports';
+import lessonsCompleted, { setLessonsCompleted } from '../redux/lessonsCompleted';
 import { setLessonsError, setLessonsWord } from '../redux/lessons';
 
 
 const Categories = () => {
     const imports = Imports();
     const { lessonsData, lessonsError, lessonsWord } = useSelector(state => state.lessons);
+    const { completedData } = useSelector(state => state.lessonsCompleted);
 
     const axiosConfig = {
         headers: {
@@ -46,17 +48,29 @@ const Categories = () => {
         }
     }
 
+    const fetchLessonComplete = async () => {
+        try {
+            const response = await axios.get(`/categories/results/completed`, axiosConfig);
+
+            imports.dispatch(setLessonsCompleted(response.data));
+        }
+        catch(error) {
+            imports.dispatch(setLessonsError());
+        }
+    }
+
     useEffect(() => {
         FetchLessons(imports.dispatch, imports.token, imports.location, imports.searchParams, imports.navigate);
     }, [imports.dispatch, imports.location]);
 
     useEffect(() => {
         allWordsCount();
+        fetchLessonComplete();
     }, [imports.dispatch, lessonsData]);
 
     if(lessonsError) {
         return <PageError>{lessonsError}</PageError>
-    }   
+    }
 
     return (
         <Section>
@@ -73,7 +87,14 @@ const Categories = () => {
                             map(lessonsData, function(value, key) {
                                 return (
                                     <React.Fragment key={key}>
-                                        <LessonCard title={value.title} description={value.description} disable={(lessonsWord[value.id] < 10)} to={`/categories/${value.id}`} />
+                                        <LessonCard 
+                                            title={value.title} 
+                                            description={value.description} 
+                                            disable={(lessonsWord[value.id] < 10)} 
+                                            to={`/categories/${value.id}`} 
+                                            completed={(!!find(completedData, ['lessons_id', value.id]))} 
+                                            results={`/categories/${value.id}/results`}
+                                        />
                                     </React.Fragment>
                                 );
                             })

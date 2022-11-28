@@ -47,7 +47,7 @@ const Answer = () => {
             imports.dispatch(initializeAnswer(answerInitialize));
         }
         catch(error) {
-            SetError(imports.dispatch, setLessonError, error.response.data.status);
+            SetError(imports.dispatch, setLessonError, error.response.status);
         }
     }
 
@@ -58,7 +58,7 @@ const Answer = () => {
             imports.dispatch(setChoices(response.data));
         }
         catch(error) {
-            SetError(imports.dispatch, setWordsError, error.response.data.status);
+            SetError(imports.dispatch, setWordsError, error.response.status);
         }
     }
 
@@ -77,10 +77,10 @@ const Answer = () => {
         try {
             const response = await axios.post(`/categories/${imports.params.id}/answers`, {'answers': answerData},axiosConfig);
 
-            imports.navigate(-1, {result: true});
+            imports.navigate(`/categories/${imports.params.id}/results`, {replace: true});
         }
         catch(error) {
-            SetError(imports.dispatch, setWordsError, error.response.data.status);
+            SetError(imports.dispatch, setWordsError, error.response.status);
         }
     }
 
