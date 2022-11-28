@@ -157,9 +157,14 @@ const Lesson = () => {
                         {lesson.description}
                     </div>
                 </div>
-                <div className='flex flex-col mt-6'>
-                    <div className='text-start text-xl mt-2'>
-                        Words
+                <div className='container w-full lg:w-1/2 mx-auto mt-6 divide-y-2 divide-blue-200'>
+                    <div className='flex flex-col'>
+                        <div className='text-start text-xl font-semibold'>
+                            {lesson.title}
+                        </div>
+                        <div className='text-start text-l'>
+                            {lesson.description}
+                        </div>
                     </div>
                     <div className='p-3 lg:p-6 grid lg:grid-cols-2'>
                         {

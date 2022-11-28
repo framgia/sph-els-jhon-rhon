@@ -14,7 +14,7 @@ class LessonsController extends Controller
     }
 
     public function lessons() {
-        $lessons = Lessons::latest()->paginate(5);
+        $lessons = Lessons::latest()->paginate(6);
 
         return response()->json([
             'lessons' => $lessons,

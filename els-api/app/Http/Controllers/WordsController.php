@@ -37,6 +37,19 @@ class WordsController extends Controller
     }
 
     public function words($lessonId) {
+        $lesson = Lessons::findOrFail($lessonId);
+
+        return response()->json([
+            'lesson' => $lesson,
+            'words' => $lesson->words,
+        ]);
+    }
+
+    public function allWords() {
+        return Words::all();
+    }
+
+    public function adminWords($lessonId) {
         return Lessons::findOrFail($lessonId)->words->sortByDesc('created_at')->paginate(10);
     }
 

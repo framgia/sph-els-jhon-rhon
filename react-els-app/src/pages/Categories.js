@@ -1,5 +1,6 @@
-import { map } from 'lodash';
+import { find, findKey, map } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import axios from '../api/axios';
 import Empty from '../components/atoms/Empty';
@@ -10,18 +11,52 @@ import PageError from '../components/organisms/PageError';
 import Pagination from '../components/organisms/Pagination';
 import FetchLessons from '../components/templates/FetchLessons';
 import { Imports } from '../components/templates/Imports';
+import { setLessonsError, setLessonsWord } from '../redux/lessons';
 
 
 const Categories = () => {
     const imports = Imports();
+    const { lessonsData, lessonsError, lessonsWord } = useSelector(state => state.lessons);
+
+    const axiosConfig = {
+        headers: {
+            Authorization: `Bearer ${imports.token}`
+        }
+    }
+
+    const allWordsCount = async () => {
+        try {
+            const response = await axios.get(`/categories/words`, axiosConfig);
+            const lessons = {};
+            
+            map(lessonsData, function(value) {
+                lessons[value.id] = 0;
+            });
+
+            map(response.data, function(value) {
+                if(value.lessons_id in lessons){
+                    lessons[value.lessons_id] += 1;
+                }
+            });
+
+            imports.dispatch(setLessonsWord(lessons));
+        }
+        catch(error) {
+            imports.dispatch(setLessonsError());
+        }
+    }
 
     useEffect(() => {
         FetchLessons(imports.dispatch, imports.token, imports.location, imports.searchParams, imports.navigate);
     }, [imports.dispatch, imports.location]);
 
-    if(imports.lessonsError) {
-        return <PageError>{imports.lessonsError}</PageError>
-    }
+    useEffect(() => {
+        allWordsCount();
+    }, [imports.dispatch, lessonsData]);
+
+    if(lessonsError) {
+        return <PageError>{lessonsError}</PageError>
+    }   
 
     return (
         <Section>
@@ -35,11 +70,15 @@ const Categories = () => {
                     </div>
                     <div className='grid grid-cols-1 gap-10 justify-items-center lg:grid-cols-2 py-4'>
                         {
-                            map(imports.lessonsData, function(value, key) {
-                                return <LessonCard title={value.title} description={value.description} to='' />
+                            map(lessonsData, function(value, key) {
+                                return (
+                                    <React.Fragment key={key}>
+                                        <LessonCard title={value.title} description={value.description} disable={(lessonsWord[value.id] < 2)} to={`/categories/${value.id}`} />
+                                    </React.Fragment>
+                                );
                             })
                         }
-                        <Empty data={imports.lessonsData}>
+                        <Empty data={lessonsData}>
                             <div className='w-full'>No Lessons to show...</div>
                         </Empty>
                     </div>

@@ -19,7 +19,7 @@ const AddWord = () => {
     const [ lessonData, setLessonData ] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const params = useParams();
+    const params = useParams(); 
 
     const axiosConfig = {
         headers: {

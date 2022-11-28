@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
@@ -16,18 +17,28 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/categories', [LessonsController::class, 'lessons']);
-    Route::get('/categories/{id}', [LessonsController::class, 'lesson']);
-    Route::get('/categories/words/{id}', [WordsController::class, 'word']);
-    Route::get('/categories/{lessonId}/words', [WordsController::class, 'words']);
+
+    //Categories
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [LessonsController::class, 'lessons']);
+        Route::get('/words', [WordsController::class, 'allWords']);
+        Route::get('/{id}', [LessonsController::class, 'lesson']);
+        Route::get('/words/{id}', [WordsController::class, 'word']);
+        Route::get('/words/{id}/choices', [ChoicesController::class, 'choices']);
+        Route::get('/{lessonId}/words', [WordsController::class, 'words']);
+    });
 });
 
 //Admin routes
 Route::group(['middleware' => ['auth:sanctum', 'auth.admin']], function () {
-    Route::post('/admin/categories/add', [LessonsController::class, 'store']);
-    Route::put('/admin/categories/{id}/edit', [LessonsController::class, 'update']);
-    Route::post('/admin/categories/{id}/delete', [LessonsController::class, 'destroy']);
-    Route::post('/admin/categories/{lessonId}/words/add', [WordsController::class, 'store']);
-    Route::put('/admin/categories/words/{id}/edit', [WordsController::class, 'update']);
-    Route::post('/admin/categories/words/{id}/delete', [WordsController::class, 'destroy']);
+    //Categories
+    Route::prefix('admin/categories', )->group(function () {
+        Route::post('/add', [LessonsController::class, 'store']);
+        Route::put('/{id}/edit', [LessonsController::class, 'update']);
+        Route::post('/{id}/delete', [LessonsController::class, 'destroy']);
+        Route::get('/{lessonId}/words', [WordsController::class, 'adminWords']);
+        Route::post('/{lessonId}/words/add', [WordsController::class, 'store']);
+        Route::put('/words/{id}/edit', [WordsController::class, 'update']);
+        Route::post('/words/{id}/delete', [WordsController::class, 'destroy']);
+    });
 });

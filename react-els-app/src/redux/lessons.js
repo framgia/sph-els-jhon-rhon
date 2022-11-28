@@ -4,7 +4,8 @@ export const lessonsSlice = createSlice({
     name: 'lessons',
     initialState: {
         lessonsData: {},
-        lessonsError: ''
+        lessonsError: '',
+        lessonsWord: {},
     },
     reducers: {
         setLessonsData: (state, action) => {
@@ -13,10 +14,13 @@ export const lessonsSlice = createSlice({
         },
         setLessonsError: (state) => {
             state.lessonsError = 'Failed to fetch lessons';
+        },
+        setLessonsWord: (state, action) => {
+            state.lessonsWord = action.payload;
         }
     }
 });
 
-export const { setLessonsData, setLessonsError } = lessonsSlice.actions;
+export const { setLessonsData, setLessonsError, setLessonsWord } = lessonsSlice.actions;
 
 export default lessonsSlice.reducer;

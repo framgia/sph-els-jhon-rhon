@@ -13,6 +13,7 @@ import AddWord from './pages/AddWord';
 import Lesson from './pages/Lesson';
 import EditWord from './pages/EditWord';
 import Categories from './pages/Categories';
+import Answer from './pages/Answer';
 
 const App = () => {
     return (
@@ -23,6 +24,9 @@ const App = () => {
                 <Route path='/' element='home' />
                 <Route element={<RequireAuth allowedRoles={[roles.STUDENT]} />} >
                     <Route path='/categories' element={<Categories />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[roles.STUDENT]} />} >
+                    <Route path='/categories/:id' element={<Answer />} />
                 </Route>
                 <Route element={<RequireAuth allowedRoles={[roles.ADMIN]} />} >
                     <Route path='/admin/categories' element={<AdminCategories />} />
