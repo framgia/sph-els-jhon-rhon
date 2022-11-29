@@ -20,6 +20,7 @@ const Answer = () => {
     const { lesson, lessonError } = useSelector(state => state.lesson);
     const { current, answerData, completed } = useSelector(state => state.answer);
     const { choices } = useSelector(state => state.choices);
+    const { user } = useSelector(state => state.persist.userAuthentication);
 
     const axiosConfig = {
         headers: {
@@ -40,7 +41,7 @@ const Answer = () => {
             }
 
             map(response.data.words, function(value, key) {
-                answerInitialize[key] = {'words_id': value.id, 'answer': null};
+                answerInitialize[key] = {'users_id': user.id,'words_id': value.id, 'choices_id': null};
             });
 
             imports.dispatch(initializeAnswer(answerInitialize));
@@ -61,14 +62,14 @@ const Answer = () => {
         }
     }
 
-    const onChoiceSelect = async (event, curr, val) => {
+    const onChoiceSelect = (event, curr, val) => {
         if((curr+1) < wordsData.length) {
-            await imports.dispatch(setAnswerData({key: curr, value: {'words_id': val.words_id, 'answer': val.id}}));
-            await imports.dispatch(setAnswerCurrent(curr+1));
+            imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
+            imports.dispatch(setAnswerCurrent(curr+1));
             event.target.blur();
             return;
         }       
-        imports.dispatch(setAnswerData({key: curr, value: {'words_id': val.words_id, 'answer': val.id}}));
+        imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
         imports.dispatch(setAnswerComplete());
     }
 
