@@ -5,17 +5,24 @@ export const answerSlice = createSlice({
     initialState: {
         current: null,
         answerData: {},
+        completed: false
     },
     reducers: {
+        initializeAnswer: (state, action) => {
+            state.answerData = action.payload
+        },
         setAnswerData: (state, action) => {
-            state.answerData = { ...state.answerData, [action.payload.key] : [action.payload.value] };
+            state.answerData[action.payload.key] = action.payload.value;
         },
         setAnswerCurrent: (state, action) => {
             state.current = action.payload;
+        },
+        setAnswerComplete: (state) => {
+            state.completed = true;
         }
     }
 });
 
-export const { setAnswerData, setAnswerCurrent } = answerSlice.actions;
+export const { initializeAnswer, setAnswerData, setAnswerCurrent, setAnswerComplete } = answerSlice.actions;
 
 export default answerSlice.reducer;

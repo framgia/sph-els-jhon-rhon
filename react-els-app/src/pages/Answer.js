@@ -9,17 +9,18 @@ import { setWordsData, setWordsError } from '../redux/words';
 import SetError from '../components/templates/SetError';
 import PageError from '../components/organisms/PageError';
 import { lessonData, setLessonError } from '../redux/lesson';
-import { setAnswerCurrent } from '../redux/answer';
+import { initializeAnswer, setAnswerComplete, setAnswerCurrent, setAnswerData } from '../redux/answer';
 import { setChoices } from '../redux/choices';
 import { map } from 'lodash';
 import WhiteButton from '../components/atoms/WhiteButton';
 
 const Answer = () => {
     const imports = Imports();
-    const { wordsData, wordsError } = useSelector(state => state.words);
+    const { wordsData } = useSelector(state => state.words);
     const { lesson, lessonError } = useSelector(state => state.lesson);
-    const { current, answerData } = useSelector(state => state.answer);
+    const { current, answerData, completed } = useSelector(state => state.answer);
     const { choices } = useSelector(state => state.choices);
+    const { user } = useSelector(state => state.persist.userAuthentication);
 
     const axiosConfig = {
         headers: {
@@ -31,12 +32,19 @@ const Answer = () => {
         imports.dispatch(setAnswerCurrent(null));
         try {
             const response = await axios.get(`/categories/${imports.params.id}/words`, axiosConfig);
+            const answerInitialize = {}
 
             imports.dispatch(lessonData(response.data.lesson));
             imports.dispatch(setWordsData(response.data.words));
             if(response.data.words.length > 0) {
                 imports.dispatch(setAnswerCurrent(0));
             }
+
+            map(response.data.words, function(value, key) {
+                answerInitialize[key] = {'users_id': user.id,'words_id': value.id, 'choices_id': null};
+            });
+
+            imports.dispatch(initializeAnswer(answerInitialize));
         }
         catch(error) {
             SetError(imports.dispatch, setLessonError, error.response.data.status);
@@ -54,6 +62,28 @@ const Answer = () => {
         }
     }
 
+    const onChoiceSelect = (event, curr, val) => {
+        if((curr+1) < wordsData.length) {
+            imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
+            imports.dispatch(setAnswerCurrent(curr+1));
+            event.target.blur();
+            return;
+        }       
+        imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
+        imports.dispatch(setAnswerComplete());
+    }
+
+    const submitAnswers = async () => {
+        try {
+            const response = await axios.post(`/categories/${imports.params.id}/answers`, {'answers': answerData},axiosConfig);
+
+            imports.navigate(-1, {result: true});
+        }
+        catch(error) {
+            SetError(imports.dispatch, setWordsError, error.response.data.status);
+        }
+    }
+
     useEffect(() => {
         fetchWords();
     }, [imports.dispatch]);
@@ -63,6 +93,12 @@ const Answer = () => {
             fetchChoices();
         }
     }, [current]);
+
+    useEffect(() => {
+        if(completed) {
+            submitAnswers();
+        }
+    }, [completed]);
 
     if(lessonError.header || (current === null)) {
         return <PageError>{lessonError.header? lessonError.header : 'No words to show'}</PageError>
@@ -91,7 +127,7 @@ const Answer = () => {
                                     map(choices, function(value, key) {
                                         return (
                                             <React.Fragment key={key}>
-                                                <WhiteButton btnType='button' custStyle='w-full py-3'>{value.choice}</WhiteButton>
+                                                <WhiteButton onClick={(event) => onChoiceSelect(event, current, value)} btnType='button' custStyle='w-full py-3'>{value.choice}</WhiteButton>
                                             </React.Fragment>
                                         );
                                     })
