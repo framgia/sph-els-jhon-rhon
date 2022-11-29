@@ -73,7 +73,7 @@ const Categories = () => {
                             map(lessonsData, function(value, key) {
                                 return (
                                     <React.Fragment key={key}>
-                                        <LessonCard title={value.title} description={value.description} disable={(lessonsWord[value.id] < 2)} to={`/categories/${value.id}`} />
+                                        <LessonCard title={value.title} description={value.description} disable={(lessonsWord[value.id] < 10)} to={`/categories/${value.id}`} />
                                     </React.Fragment>
                                 );
                             })

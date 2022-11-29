@@ -15,4 +15,8 @@ class Lessons extends Model
     public function words() {
         return $this->hasMany(Words::class);
     }
+
+    public function results() {
+        return $this->hasMany(Results::class);
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\LessonsController;
@@ -26,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/words/{id}', [WordsController::class, 'word']);
         Route::get('/words/{id}/choices', [ChoicesController::class, 'choices']);
         Route::get('/{lessonId}/words', [WordsController::class, 'words']);
+        Route::post('/{lessonId}/answers', [AnswerController::class, 'store']);
     });
 });
 
