@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //User learned
     Route::prefix('{id}/learned')->group(function () {
         Route::get('/words', [ResultsController::class, 'words']);
+        Route::get('/lessons', [ResultsController::class, 'lessons']);
     });
 
     //Profile
