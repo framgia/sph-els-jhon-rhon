@@ -50,4 +50,16 @@ class ResultsController extends Controller
             'words' => $words,
         ]);
     }
+
+    public function lessons($id) {
+        $user = User::findOrFail($id);
+        $results = Results::where('users_id', '=', $user->id)->get();
+        $lessons = [];
+
+        foreach($results as $result) {
+            array_push($lessons, Lessons::where('id', '=', $result->lessons_id)->firstOrFail(['id', 'title']));
+        }
+
+        return collect($lessons)->paginate(6);
+    }
 }
