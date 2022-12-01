@@ -52,11 +52,9 @@ const ProfileInfo = ({id}) => {
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-col gap-1 items-center'>
-                <div className='text-sm'>
-                    <Link to={`/${profile.id}/learned/words`} className='text-blue-600 hover:underline'>Learned {learned.words} words</Link>                    
-                </div>
-                <div className='text-sm'>Learned {learned.lessons} lessons</div>
+            <div className='w-full flex flex-col gap-1 items-center text-sm'>
+                    <Link to={`/${profile.id}/learned/words`} className='text-blue-600 hover:underline'>Learned {learned.words} words</Link>
+                    <Link to={`/${profile.id}/learned/lessons`} className='text-blue-600 hover:underline'>Learned {learned.lessons} lessons</Link>
             </div>
         </div>
     );
