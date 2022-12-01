@@ -83,7 +83,7 @@ const WordsLearned = () => {
                         </div>
                         <div className='w-full pt-2'>
                             <div className={`w-full grid grid-cols-1 ${keys(wordsLearnedData.answers).length > 5? 'lg:grid-cols-2' : ''}`}>
-                                <div className='w-full flex flex-row lg:border-r border-blue-200 py-2 text-center items-center font-semibold'>
+                                <div className={`w-full flex flex-row border-blue-200 py-2 text-center items-center font-semibold ${keys(wordsLearnedData.answers).length > 5? 'lg:border-r' : ''}`}>
                                     <div className='w-1/2'>
                                         Words
                                     </div>
@@ -101,7 +101,7 @@ const WordsLearned = () => {
                                 </div>
                                 {
                                     map(wordsLearnedData.answers, function(value, key) {
-                                        const borders = ((key%2 === 0) || (keys(wordsLearnedData.answers).length < 6))? 'lg:border-r border-blue-200': '';
+                                        const borders = ((key%2 === 0) && (keys(wordsLearnedData.answers).length > 5))? 'lg:border-r border-blue-200': '';
                                         const word = find(wordsLearnedData.words, ['id', value.words_id])? find(wordsLearnedData.words, ['id', value.words_id]) : '';
                                         return (
                                             <div key={key} className={`w-full flex flex-row py-1 text-center items-center ${borders}`}>
