@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Answers extends Model
+class Answer extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,15 +16,15 @@ class Answers extends Model
     }
 
     public function word() {
-        return $this->belongsTo(Words::class);
+        return $this->belongsTo(Word::class);
     }
 
     public function choice() {
-        return $this->belongsTo(Choices::class, 'choices_id', 'id');
+        return $this->belongsTo(Choice::class);
     }
 
     public static function userAnswersChoice($id) {
-        return Answers::where('users_id', '=', $id)->get()->map(function ($answer) {
+        return Answer::where('user_id', '=', $id)->get()->map(function ($answer) {
             return $answer->choice;
         });
     }

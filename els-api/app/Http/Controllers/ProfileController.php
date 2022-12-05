@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Results;
+use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ class ProfileController extends Controller
 {
     public function profile($id) {
         $user = User::findOrFail($id);
-        $results = Results::where('users_id', '=', $user->id)->get();
+        $results = Result::where('user_id', '=', $user->id)->get();
 
         $profile = [
             'id' => $user->id,
