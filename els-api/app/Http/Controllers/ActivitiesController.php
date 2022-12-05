@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activities;
-use App\Models\Lessons;
-use App\Models\Results;
+use App\Models\Lesson;
+use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,13 +15,13 @@ class ActivitiesController extends Controller
         $returnActivities = [];
 
         foreach($activities as $activity) {
-            if($activity->activitable_type === Results::class) {
+            if($activity->activitable_type === Result::class) {
                 $result = $activity->activitable_type::where('id', '=', $activity->activitable_id)->firstOrFail();
                 array_push($returnActivities, [
                     'type' => 'result',
                     'user' => User::findOrFail($activity->user_id),
                     'result' => $result,
-                    'lesson' => Lessons::where('id', '=', $result->lessons_id)->firstOrFail(),
+                    'lesson' => Lesson::where('id', '=', $result->lesson_id)->firstOrFail(),
                     'created_at' => $activity->created_at,
                 ]);
             }

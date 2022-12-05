@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lessons;
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 class LessonsController extends Controller
 {
     public function lesson($id) {
-        return Lessons::findOrFail($id);
+        return Lesson::findOrFail($id);
     }
 
     public function lessons() {
-        $lessons = Lessons::latest()->paginate(6);
+        $lessons = Lesson::latest()->paginate(6);
 
         return response()->json([
             'lessons' => $lessons,
@@ -33,7 +33,7 @@ class LessonsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        Lessons::create([
+        Lesson::create([
             'title' => $request->title,
             'description' => $request->description,
         ]);
@@ -55,7 +55,7 @@ class LessonsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        Lessons::findOrFail($id)->update([
+        Lesson::findOrFail($id)->update([
             'title' => $request->title,
             'description' => $request->description,
         ]);
@@ -66,7 +66,7 @@ class LessonsController extends Controller
     }
 
     public function destroy(Request $request, $id) {
-        Lessons::findOrFail($id)->delete();
+        Lesson::findOrFail($id)->delete();
 
         return response()->json([
             'message' => 'Lesson deleted successfully',
