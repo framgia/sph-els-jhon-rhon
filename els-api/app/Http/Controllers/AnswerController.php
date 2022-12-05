@@ -31,6 +31,10 @@ class AnswerController extends Controller
         DB::transaction(function() use ($data, $result)  {
             Answers::upsert($data, ['users_id', 'words_id']);
             Results::upsert($result, ['users_id', 'lessons_id']);
+
+            $results = Results::where('users_id', '=', $result['users_id'])->where('lessons_id', '=', $result['lessons_id'])->firstOrFail();
+
+            $results->activities()->create(['user_id' => auth()->user()->id]);
         });
 
         return response()->json([

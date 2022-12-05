@@ -31,6 +31,7 @@ import lessonsCompletedReducer from './lessonsCompleted';
 import profileReducer from './profile';
 import wordsLearnedReducer from './wordsLearned';
 import lessonsLearnedReducer from './lessonsLearned';
+import activitiesReducer from './activities';
 
 const persistConfig = {
     key: 'root',
@@ -65,7 +66,8 @@ export const store = configureStore ({
         lessonsCompleted: lessonsCompletedReducer,
         profile: profileReducer,
         wordsLearned: wordsLearnedReducer,
-        lessonsLearned: lessonsLearnedReducer
+        lessonsLearned: lessonsLearnedReducer,
+        activities: activitiesReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
