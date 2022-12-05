@@ -17,4 +17,8 @@ class Results extends Model
     public function lesson() {
         return $this->belongsTo(Lessons::class);
     }
+
+    public function activities() {
+        return $this->morphMany(Activities::class, 'activitable');
+    }
 }
