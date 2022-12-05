@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
@@ -39,6 +40,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('{id}/learned')->group(function () {
         Route::get('/words', [ResultsController::class, 'words']);
         Route::get('/lessons', [ResultsController::class, 'lessons']);
+    });
+
+    //User activities
+    Route::prefix('{id}/activities')->group(function () {
+        Route::get('/', [ActivitiesController::class, 'activities']);
     });
 
     //Profile
