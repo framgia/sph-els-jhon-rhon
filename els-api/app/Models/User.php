@@ -41,11 +41,11 @@ class User extends Authenticatable
     ];
 
     public function answers() {
-        return $this->hasMany(Answers::class);
+        return $this->hasMany(Answer::class);
     }
 
     public function results() {
-        return $this->hasMany(Results::class, 'users_id', 'id');
+        return $this->hasMany(Result::class);
     }
 
     public function activities() {

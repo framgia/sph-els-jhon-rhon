@@ -102,7 +102,7 @@ const WordsLearned = () => {
                                 {
                                     map(wordsLearnedData.answers, function(value, key) {
                                         const borders = ((key%2 === 0) && (keys(wordsLearnedData.answers).length > 5))? 'lg:border-r border-blue-200': '';
-                                        const word = find(wordsLearnedData.words, ['id', value.words_id])? find(wordsLearnedData.words, ['id', value.words_id]) : '';
+                                        const word = find(wordsLearnedData.words, ['id', value.word_id])? find(wordsLearnedData.words, ['id', value.word_id]) : '';
                                         return (
                                             <div key={key} className={`w-full flex flex-row py-1 text-center items-center ${borders}`}>
                                                 <div className='w-1/2'>

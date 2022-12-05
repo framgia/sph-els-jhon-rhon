@@ -36,8 +36,8 @@ const Categories = () => {
             });
 
             map(response.data, function(value) {
-                if(value.lessons_id in lessons){
-                    lessons[value.lessons_id] += 1;
+                if(value.lesson_id in lessons){
+                    lessons[value.lesson_id] += 1;
                 }
             });
 
@@ -90,9 +90,9 @@ const Categories = () => {
                                         <LessonCard 
                                             title={value.title} 
                                             description={value.description} 
-                                            disable={(lessonsWord[value.id] < 10)} 
+                                            disable={(lessonsWord[value.id] < 10)}
                                             to={`/categories/${value.id}`} 
-                                            completed={(!!find(completedData, ['lessons_id', value.id]))} 
+                                            completed={(!!find(completedData, ['lesson_id', value.id]))} 
                                             results={`/categories/${value.id}/results`}
                                         />
                                     </React.Fragment>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Results extends Model
+class Result extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -15,7 +15,7 @@ class Results extends Model
     }
 
     public function lesson() {
-        return $this->belongsTo(Lessons::class);
+        return $this->belongsTo(Lesson::class);
     }
 
     public function activities() {

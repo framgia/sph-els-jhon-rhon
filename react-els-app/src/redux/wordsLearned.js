@@ -10,7 +10,7 @@ export const wordsLearnedSlice = createSlice({
             },
             answers: {
                 id: '',
-                words_id: '',
+                word_id: '',
                 choice: ''
             }
         },

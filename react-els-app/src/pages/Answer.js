@@ -41,7 +41,7 @@ const Answer = () => {
             }
 
             map(response.data.words, function(value, key) {
-                answerInitialize[key] = {'users_id': user.id,'words_id': value.id, 'choices_id': null};
+                answerInitialize[key] = {'user_id': user.id,'word_id': value.id, 'choice_id': null};
             });
 
             imports.dispatch(initializeAnswer(answerInitialize));
@@ -64,12 +64,12 @@ const Answer = () => {
 
     const onChoiceSelect = (event, curr, val) => {
         if((curr+1) < wordsData.length) {
-            imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
+            imports.dispatch(setAnswerData({key: curr, value: {'user_id': user.id, 'word_id': val.word_id, 'choice_id': val.id}}));
             imports.dispatch(setAnswerCurrent(curr+1));
             event.target.blur();
             return;
         }       
-        imports.dispatch(setAnswerData({key: curr, value: {'users_id': user.id, 'words_id': val.words_id, 'choices_id': val.id}}));
+        imports.dispatch(setAnswerData({key: curr, value: {'user_id': user.id, 'word_id': val.word_id, 'choice_id': val.id}}));
         imports.dispatch(setAnswerComplete());
     }
 
