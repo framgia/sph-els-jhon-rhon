@@ -8,31 +8,22 @@ use App\Models\Lessons;
 use App\Models\Results;
 use Illuminate\Console\View\Components\Choice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ResultsController extends Controller
 {
     public function results($lessonId) {
         $user = auth()->user();
-        $lesson = Lessons::findOrFail($lessonId);
-        $results = Results::where('users_id', '=', $user->id)
-            ->where('lessons_id', '=', $lessonId)
-            ->firstOrFail();
-        $words = $lesson->words;
-        $answers = [];
+        $dbQuery = DB::transaction(function() use ($lessonId, $user)  {
+            $lesson = Lessons::findOrFail($lessonId);
+            $results = $user->results->where('lessons_id', '=', $lessonId)->firstOrFail();
+            $answers = Answers::userAnswersChoice($user->id);
+            $words = $lesson->words;
 
-        foreach($words as $word) {
-            array_push($answers, Choices::where('id','=',
-                Answers::where('users_id', '=', $user->id)->where('words_id', '=', $word->id)->firstOrFail()->choices_id)
-                ->firstOrFail()
-            );
-        }
+            return compact('lesson', 'results', 'answers', 'words');
+        });
 
-        return response()->json([
-            'lesson' => $lesson,
-            'results' => $results,
-            'words' => $words,
-            'answers' => $answers,
-        ]);
+        return response()->json($dbQuery);
     }
 
     public function completed() {

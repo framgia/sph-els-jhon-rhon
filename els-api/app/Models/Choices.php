@@ -15,4 +15,8 @@ class Choices extends Model
     public function word() {
         return $this->belongsTo(Words::class);
     }
+
+    public function answers() {
+        return $this->hasMany(Answers::class);
+    }
 }
