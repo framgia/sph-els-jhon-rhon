@@ -28,6 +28,7 @@ import answerReducer from './answer';
 import choicesReducer from './choices';
 import resultsReducer from './results';
 import lessonsCompletedReducer from './lessonsCompleted';
+import profileReducer from './profile';
 
 const persistConfig = {
     key: 'root',
@@ -59,7 +60,8 @@ export const store = configureStore ({
         answer: answerReducer,
         choices: choicesReducer,
         results: resultsReducer,
-        lessonsCompleted: lessonsCompletedReducer
+        lessonsCompleted: lessonsCompletedReducer,
+        profile: profileReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
