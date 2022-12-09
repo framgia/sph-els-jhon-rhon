@@ -1,4 +1,4 @@
-import { capitalize, entries, keys, map, orderBy, reverse, values } from 'lodash';
+import { capitalize, map, orderBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -24,23 +24,30 @@ const Activities = ({id}) => {
     }
 
     const destructure = (type, data) => {
-        const user = <Link to={`/${data.user.id}`} className='text-blue-600 font-semibold hover:underline'>{data.user.id === imports.user.id? 'You' : `${capitalize(data.user.fname)} ${capitalize(data.user.lname)}`}</Link>;
+        const userLink = (user) => {
+            const to = user.id === imports.user.id? '/': `/profile/${user.id}`
+            const text = user.id === imports.user.id? 'You' : `${capitalize(user.fname)} ${capitalize(user.lname)}`;
 
-        if(type === 'result') {
-            return (
-                <div>
-                    {user} learned {data.result.score} of {data.result.total} words in {data.lesson.title}
-                </div>
-            );
+            return <Link to={to} className='text-blue-600 font-semibold hover:underline'>{text}</Link>;
+        }
+
+        switch(type) {
+            case('result'):
+                return <div>{userLink(data.user)} learned {data.result.score} of {data.result.total} words in {data.lesson.title}</div>;
+            case('follow'):
+                return <div>{userLink(data.user)} followed {userLink(data.followedUser)}</div>;
+            default:
+                return;
         }
     }
 
     const fetchActivities = async (page = 0) => {
         const pageSearch = (page)? `?page=${page}` : '';
+        const routes = (id === imports.user.id)? `/${id}/activities${pageSearch}`: `profile/${id}/activities${pageSearch}`;
         try {
-            const response = await axios.get(`/${id}/activities${pageSearch}`, axiosConfig);
+            const response = await axios.get(routes, axiosConfig);
 
-            imports.dispatch(setActivitiesData(reverse(values(response.data.data))));
+            imports.dispatch(setActivitiesData(orderBy(response.data.data, ['created_at'], ['desc'])));
             imports.dispatch(setPaginateData({
                 'current_page': response.data.current_page,
                 'last_page': response.data.last_page,
@@ -69,7 +76,7 @@ const Activities = ({id}) => {
 
     useEffect(() => {
         fetchActivities();
-    }, [imports.dispatch]);
+    }, [imports.dispatch, imports.location]);
 
     if(activitiesError.header) {
         return <HeaderError>{activitiesError.header}</HeaderError>
@@ -78,24 +85,22 @@ const Activities = ({id}) => {
     return (
         <div className='w-full lg:w-3/4 border border-blue-300 rounded-sm p-5 divide-y-2 divide-blue-200'>
             <div className='font-semibold text-lg pb-2'>Activities</div>
-            <div className='w-full flex flex-col divide-y pt-2 divide-blue-100'>
+            <div className='w-full flex flex-col divide-y py-2 divide-blue-100'>
                 {
                     map(activitiesData, function(value, key) {
-                        if(value.type === 'result') {
-                            return (
-                                <div key={key} className='w-full flex flex-col py-2'>
-                                    <div className='w-full flex flex-row items-center gap-5'>
-                                        <div className='flex w-10 h-10 text-xs items-center border border-blue-300 justify-center'>
-                                            <div>Image</div>
-                                        </div>
-                                        <div className='flex flex-col'>
-                                        {destructure('result', value)}
-                                        <div className='text-xs text-gray-500'><TimeAgo input={value.created_at} /></div>
-                                        </div>
+                        return (
+                            <div key={key} className='w-full flex flex-col py-2'>
+                                <div className='w-full flex flex-row items-center gap-5'>
+                                    <div className='flex w-10 h-10 text-xs items-center border border-blue-300 justify-center'>
+                                        <div>Image</div>
+                                    </div>
+                                    <div className='flex flex-col'>
+                                    {destructure(value.type, value)}
+                                    <div className='text-xs text-gray-500'><TimeAgo input={value.created_at} /></div>
                                     </div>
                                 </div>
-                            );
-                        }
+                            </div>
+                        );
                     })
                 }
                 <Empty data={activitiesData}>No activities to show...</Empty>

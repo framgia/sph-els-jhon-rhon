@@ -16,7 +16,11 @@ export const profileSlice = createSlice({
         learned: {
             words: 0,
             lessons: 0
-        }
+        },
+        profileError: {
+            header: ''
+        },
+        isFollowing: false
     },
     reducers: {
         setProfile: (state, action) => {
@@ -28,9 +32,15 @@ export const profileSlice = createSlice({
         setLearned: (state, action) => {
             state.learned = action.payload;
         },
+        setFollowing: (state, action) => {
+            state.isFollowing = action.payload;
+        },
+        setProfileError: (state, action) => {
+            state.profileError = {...state.profileError, [action.payload.key]: action.payload.value};
+        }
     }
 });
 
-export const { setProfile, setFollows, setLearned } = profileSlice.actions;
+export const { setProfile, setFollows, setLearned, setFollowing, setProfileError } = profileSlice.actions;
 
 export default profileSlice.reducer;
