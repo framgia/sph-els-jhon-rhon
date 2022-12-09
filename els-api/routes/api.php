@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
+use App\Http\Controllers\FollowsController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsController;
@@ -44,12 +45,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //User activities
     Route::prefix('{id}/activities')->group(function () {
-        Route::get('/', [ActivitiesController::class, 'activities']);
+        Route::get('/', [ActivitiesController::class, 'userActivities']);
     });
 
     //Profile
-    Route::prefix('profile')->group(function () {
-        Route::get('/{id}', [ProfileController::class, 'profile']);
+    Route::prefix('profile/{id}')->group(function () {
+        Route::get('/', [ProfileController::class, 'profile']);
+        Route::get('/follows', [FollowsController::class, 'follows']);
+        Route::post('/follow', [FollowsController::class, 'follow']);
+        Route::get('/activities', [ActivitiesController::class, 'profileActivities']);
     });
 });
 
