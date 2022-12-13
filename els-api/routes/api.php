@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
@@ -20,6 +22,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
+
     //Categories
     Route::prefix('categories')->group(function () {
         Route::get('/', [LessonsController::class, 'lessons']);
@@ -31,6 +34,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/{lessonId}/answers', [AnswerController::class, 'store']);
         Route::get('/{lessonId}/results', [ResultsController::class, 'results']);
         Route::get('/results/completed', [ResultsController::class, 'completed']);
+    });
+
+    //User learned
+    Route::prefix('{id}/learned')->group(function () {
+        Route::get('/words', [ResultsController::class, 'words']);
+        Route::get('/lessons', [ResultsController::class, 'lessons']);
+    });
+
+    //User activities
+    Route::prefix('{id}/activities')->group(function () {
+        Route::get('/', [ActivitiesController::class, 'activities']);
+    });
+
+    //Profile
+    Route::prefix('profile')->group(function () {
+        Route::get('/{id}', [ProfileController::class, 'profile']);
     });
 });
 
