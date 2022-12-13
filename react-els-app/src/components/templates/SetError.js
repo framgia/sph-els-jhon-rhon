@@ -7,8 +7,6 @@ const SetError = (dispatch, setter, status = null, errorData = {}, errors = {}) 
         });
     }
 
-    console.log(setter);
-
     if(status === 400) {
         map(errors, function(value, key){
             dispatch(setter({key, value}));

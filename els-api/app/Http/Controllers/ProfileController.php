@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
@@ -31,6 +33,31 @@ class ProfileController extends Controller
         return response()->json([
             'profile' => $profile,
             'learned' => $learned,
+        ]);
+    }
+
+    public function getProfileEdit($id) {
+        return User::findOrFail($id);
+    }
+
+    public function updateProfile(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'fname' => ['required', 'max:255'],
+            'lname' => ['required', 'max:255'],
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user->update($request->only(['fname', 'lname']));
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
         ]);
     }
 }

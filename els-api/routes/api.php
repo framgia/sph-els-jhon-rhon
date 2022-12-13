@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/follows', [FollowsController::class, 'follows']);
         Route::post('/follow', [FollowsController::class, 'follow']);
         Route::get('/activities', [ActivitiesController::class, 'profileActivities']);
+        Route::get('/edit', [ProfileController::class, 'getProfileEdit']);
+        Route::post('/update', [ProfileController::class, 'updateProfile']);
     });
 });
 

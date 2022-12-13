@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { capitalize } from 'lodash';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -71,11 +72,11 @@ const ProfileInfo = ({id}) => {
     return (
         <div className='w-full flex flex-col items-center gap-3'>
             <div className='w-full divide-y divide-blue-300'>
-                <div className='w-full flex flex-col items-center gap-3'>
+                <div className='w-full relative flex flex-col items-center gap-3'>
                     <div className='flex w-28 h-28 items-center border border-blue-300 justify-center'>
                         <div>Image</div>
                     </div>
-                    <div className='font-semibold text-center mb-3'>{profile.fname} {profile.lname}</div>
+                    <div className='font-semibold text-center mb-3'>{capitalize(profile.fname)} {capitalize(profile.lname)}</div>
                 </div>
                 <div className='w-full flex flex-col items-center py-3 gap-3'>
                     <div className='w-full flex flex-row gap-10 justify-center text-center text-sm'>
