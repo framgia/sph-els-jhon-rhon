@@ -15,6 +15,9 @@ import EditWord from './pages/EditWord';
 import Categories from './pages/Categories';
 import Answer from './pages/Answer';
 import Results from './pages/Results';
+import Dashboard from './pages/Dashboard';
+import WordsLearned from './pages/WordsLearned';
+import LessonsLearned from './pages/LessonsLearned';
 
 const App = () => {
     return (
@@ -22,7 +25,12 @@ const App = () => {
             <Navbar />
 
             <Routes>
-                <Route path='/' element='home' />
+                <Route element={<RequireAuth allowedRoles={[roles.AUTHENTICATED]} />} >
+                    <Route path='/' element={<Dashboard />} />
+                    <Route path='/:id/learned/words' element={<WordsLearned />} />
+                    <Route path='/:id/learned/lessons' element={<LessonsLearned />} />
+                </Route>
+                     
                 <Route element={<RequireAuth allowedRoles={[roles.STUDENT]} />} >
                     <Route path='/categories' element={<Categories />} />
                 </Route>
