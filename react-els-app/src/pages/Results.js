@@ -66,7 +66,7 @@ const Results = () => {
                         </div>
                         {
                             map(resultsData.words, function(value, key) {
-                                const showIcon = (find(resultsData.answers, ['words_id', value.id]).answer)? <CheckIcon /> : <WrongIcon />;
+                                const showIcon = (find(resultsData.answers, ['word_id', value.id]).answer)? <CheckIcon /> : <WrongIcon />;
                                 return (
                                     <div key={key} className='flex flex-row w-full items-center'>
                                         <div className='flex flex-col items-center w-full'>
@@ -76,7 +76,7 @@ const Results = () => {
                                             <div>{value.word}</div>
                                         </div>
                                         <div className='flex flex-col items-center w-full'>
-                                            <div>{find(resultsData.answers, ['words_id', value.id]).choice}</div>
+                                            <div>{find(resultsData.answers, ['word_id', value.id]).choice}</div>
                                         </div>
                                     </div>
                                 );
