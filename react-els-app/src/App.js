@@ -19,6 +19,7 @@ import Dashboard from './pages/Dashboard';
 import WordsLearned from './pages/WordsLearned';
 import LessonsLearned from './pages/LessonsLearned';
 import Profile from './pages/Profile';
+import UserList from './pages/UserList';
 
 const App = () => {
     return (
@@ -31,6 +32,7 @@ const App = () => {
                     <Route path='/:id/learned/words' element={<WordsLearned />} />
                     <Route path='/:id/learned/lessons' element={<LessonsLearned />} />
                     <Route path='/profile/:id' element={<Profile />} />
+                    <Route path='/users' element={<UserList />} />
                 </Route>
                      
                 <Route element={<RequireAuth allowedRoles={[roles.STUDENT]} />} >

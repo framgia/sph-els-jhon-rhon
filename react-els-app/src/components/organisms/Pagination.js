@@ -17,7 +17,7 @@ const Pagination = ({ paginateData }) => {
     const nextPage = () => {
         if(paginateData.last_page > paginateData.current_page) {
             navigate(`${location.pathname}?page=${paginateData.current_page+1}`, { replace: true });
-        }  
+        }
     }
     const numberClick = (number) => {
         navigate(`${location.pathname}?page=${number}`, { replace: true });

@@ -8,6 +8,7 @@ use App\Http\Controllers\FollowsController;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,6 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
 
     //Categories
     Route::prefix('categories')->group(function () {
@@ -56,6 +56,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/activities', [ActivitiesController::class, 'profileActivities']);
         Route::get('/edit', [ProfileController::class, 'getProfileEdit']);
         Route::post('/update', [ProfileController::class, 'updateProfile']);
+    });
+
+    //Search
+    Route::prefix('search')->group(function () {
+        Route::get('/users', [SearchController::class, 'users']);
     });
 });
 

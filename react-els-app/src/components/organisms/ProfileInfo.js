@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import axios from '../../api/axios';
 import { setLearned, setProfile, setFollows, setProfileError, setFollowing } from '../../redux/profile';
 import Button from '../atoms/Button';
+import HeaderError from '../atoms/HeaderError';
 import { Imports } from '../templates/Imports';
 import SetError from '../templates/SetError';
-import PageError from './PageError';
 
 const ProfileInfo = ({id}) => {
     const imports = Imports();
@@ -66,7 +66,7 @@ const ProfileInfo = ({id}) => {
     }, [isFollowing, imports.location]);
 
     if(profileError.header) {
-        return <PageError>{profileError.header}</PageError>
+        return <HeaderError>{profileError.header}</HeaderError>
     }
 
     return (
