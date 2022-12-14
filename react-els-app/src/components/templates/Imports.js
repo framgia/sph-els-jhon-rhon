@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export const Imports = () => {
-    const { token } = useSelector(state => state.persist.userAuthentication);
+    const { user, isLoggedIn, token } = useSelector(state => state.persist.userAuthentication);
     const { paginateData } = useSelector(state => state.paginate)
     const [ isOpen, setIsOpen ] = useState(false);
     const [searchParams] = useSearchParams();
@@ -22,5 +22,7 @@ export const Imports = () => {
         searchParams: searchParams,
         paginateData: paginateData,
         params: params,
+        user: user,
+        isLoggedIn: isLoggedIn
     });
 }

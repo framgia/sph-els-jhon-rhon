@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChoicesController;
+use App\Http\Controllers\FollowsController;
 use App\Http\Controllers\LessonsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +35,32 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/{lessonId}/answers', [AnswerController::class, 'store']);
         Route::get('/{lessonId}/results', [ResultsController::class, 'results']);
         Route::get('/results/completed', [ResultsController::class, 'completed']);
+    });
+
+    //User learned
+    Route::prefix('{id}/learned')->group(function () {
+        Route::get('/words', [ResultsController::class, 'words']);
+        Route::get('/lessons', [ResultsController::class, 'lessons']);
+    });
+
+    //User activities
+    Route::prefix('{id}/activities')->group(function () {
+        Route::get('/', [ActivitiesController::class, 'userActivities']);
+    });
+
+    //Profile
+    Route::prefix('profile/{id}')->group(function () {
+        Route::get('/', [ProfileController::class, 'profile']);
+        Route::get('/follows', [FollowsController::class, 'follows']);
+        Route::post('/follow', [FollowsController::class, 'follow']);
+        Route::get('/activities', [ActivitiesController::class, 'profileActivities']);
+        Route::get('/edit', [ProfileController::class, 'getProfileEdit']);
+        Route::post('/update', [ProfileController::class, 'updateProfile']);
+    });
+
+    //Search
+    Route::prefix('search')->group(function () {
+        Route::get('/users', [SearchController::class, 'users']);
     });
 });
 
