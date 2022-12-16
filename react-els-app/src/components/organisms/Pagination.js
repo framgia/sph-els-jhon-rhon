@@ -1,26 +1,32 @@
-import { map, range } from 'lodash';
+import { has, map, range } from 'lodash';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const Pagination = ({ paginateData }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const windowLoc = window.location;
+    const params = new URL(windowLoc.href).searchParams;
 
     const notDisable = 'text-gray-500 cursor-pointer hover:text-gray-900';
     const isDisable = 'bg-slate-50 text-gray-500 border-slate-200';
 
+    const changePage = (replaceValue) => {
+        return (params.get('page'))? windowLoc.search.replace(`page=${params.get('page')}`, `page=${replaceValue}`):(windowLoc.search && !params.get('page'))? `${windowLoc.search}&page=${replaceValue}`: `?page=${replaceValue}`;
+    }
+
     const prevPage = () => {
         if(paginateData.current_page > 1) {
-            navigate(`${location.pathname}?page=${paginateData.current_page-1}`, { replace: true });
+            navigate(`${location.pathname}${changePage(paginateData.current_page-1)}`, { replace: true });
         }
     }
     const nextPage = () => {
         if(paginateData.last_page > paginateData.current_page) {
-            navigate(`${location.pathname}?page=${paginateData.current_page+1}`, { replace: true });
+            navigate(`${location.pathname}${changePage(paginateData.current_page+1)}`, { replace: true });
         }
     }
     const numberClick = (number) => {
-        navigate(`${location.pathname}?page=${number}`, { replace: true });
+        navigate(`${location.pathname}${changePage(number)}`, { replace: true });
     }
     if(!(paginateData.last_page === 1)) {
         return (

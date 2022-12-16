@@ -1,4 +1,4 @@
-import { capitalize, map } from 'lodash';
+import { capitalize, debounce, has, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const UserList = () => {
     const imports = Imports();
     const [ users, setUsers ] = useState({});
     const [ usersErrors, setUsersError ] = useState({});
+    const windowLoc = window.location;    
 
     const axiosConfig = {
         headers: {
@@ -23,20 +24,31 @@ const UserList = () => {
         }
     }
 
-    const fetchAllUsers = async () => {
-        const pageParams = imports.searchParams.get('page');
-        const page = (pageParams && (pageParams > 0))? imports.location.search: '';
+    const changePage = (replaceValue) => {
+        const params = new URL(windowLoc.href).searchParams;
+        const locSearch = windowLoc.search;
+        return (!locSearch)? `?page=${replaceValue}` :(params.get('page'))? locSearch.replace(`page=${params.get('page')}`, `page=${replaceValue}`) : `${locSearch}&page=${replaceValue}`;
+    }
+
+    const fetchUsers = async (query = '') => {
+        const params = new URL(windowLoc.href).searchParams;
+        const pageParams = params.get('page');
+        const search = query? `?query=${query}` :(pageParams && (pageParams > 0))? windowLoc.search : '';
 
         try {
-            const response = await axios.get(`/search/users${page}`, axiosConfig);
+            const response = await axios.get(`/search/users${search}`, axiosConfig);
             const respUsers = response.data;
 
-            if(!pageParams || (pageParams < 1)) {
-                window.history.replaceState(null, null, `${imports.location.pathname}?page=${respUsers.current_page}`);
+            if(query) {
+                window.history.pushState(null, null, search);
+            }
+    
+            if(!pageParams || (pageParams < 1) || query) {
+                window.history.pushState(null, null, changePage(respUsers.current_page));
             }
 
             if((respUsers.data.length === 0) && (respUsers.last_page > 1)) {
-                imports.navigate(`${imports.location.pathname}?page=${respUsers.current_page}`, {replace: true});
+                imports.navigate(`${imports.location.pathname}${changePage(respUsers.last_page)}`, {replace: true});
             }
 
             setUsers(respUsers.data);
@@ -54,8 +66,14 @@ const UserList = () => {
         }
     }
 
+    const onChangeHandler = (e) => {
+        fetchUsers(e.target.value);
+    }
+
+    const debounceHandler = debounce(onChangeHandler, 1000);
+
     useEffect(() => {
-        fetchAllUsers();
+        fetchUsers();
     }, [imports.location]);
 
     if(usersErrors.header) {
@@ -68,10 +86,13 @@ const UserList = () => {
                     <BackButton />
                 </div>
                 <div className='flex flex-col w-full lg:w-1/2 mx-auto mt-6 divide-y-2 gap-4 divide-blue-200'>
-                    
+                    <div className='flex flex-row gap-2 items-center'>
+                        <div className='w-32 text-lg font-semibold'>Search user</div>
+                        <Input inputType='text' inputName='search' onChange={debounceHandler} />
+                    </div>
                     <div className='flex flex-col pt-2 gap-3'>
                         <div className='w-full flex flex-row gap-3 items-baseline'>
-                            <div className='text-lg'>Users list:</div><div className='  text-md'>{imports.paginateData.from} to {imports.paginateData.to} of {imports.paginateData.total}</div>
+                            <div className='text-lg'>Users list:</div><div className='  text-md'>{users.length === 0? 'No users to show...': `${imports.paginateData.from} to ${imports.paginateData.to} of ${imports.paginateData.total}`}</div>
                         </div>
                         <div className='flex flex-col divide-y divide-blue-200'>
                             {
