@@ -25,6 +25,7 @@ const Navbar = () => {
                         <Link to='/admin/categories'>Categories</Link>
                     </ProtectedTags>
                     <ProtectedTags allowedRoles={[roles.AUTHENTICATED]}>
+                        <Link to='/users'>Users</Link>
                         <Link to='/categories'>Categories</Link>
                     </ProtectedTags>
                     <ProtectedTags allowedRoles={[roles.AUTHENTICATED, roles.ADMIN]}>

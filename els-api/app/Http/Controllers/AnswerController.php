@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answers;
-use App\Models\Choices;
-use App\Models\Lessons;
-use App\Models\Results;
-use App\Models\Words;
+use App\Models\Answer;
+use App\Models\Choice;
+use App\Models\Lesson;
+use App\Models\Result;
+use App\Models\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,21 +16,25 @@ class AnswerController extends Controller
         $data = $request->answers;
 
         $result = [
-            'users_id' => auth()->user()->id,
-            'lessons_id' => $lessonsId,
+            'user_id' => auth()->user()->id,
+            'lesson_id' => $lessonsId,
             'total' => collect($data)->count(),
             'score' => 0,
         ];
 
         foreach($data as $value) {
-            if(Choices::findOrFail($value['choices_id'])->answer) {
+            if(Choice::findOrFail($value['choice_id'])->answer) {
                 $result['score'] += 1;
             }
         }
 
         DB::transaction(function() use ($data, $result)  {
-            Answers::upsert($data, ['users_id', 'words_id']);
-            Results::upsert($result, ['users_id', 'lessons_id']);
+            Answer::upsert($data, ['user_id', 'word_id']);
+            Result::upsert($result, ['user_id', 'lesson_id']);
+
+            $results = Result::where('user_id', '=', $result['user_id'])->where('lesson_id', '=', $result['lesson_id'])->firstOrFail();
+
+            $results->activities()->create(['user_id' => auth()->user()->id]);
         });
 
         return response()->json([
